@@ -1,21 +1,21 @@
  ///////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is part of nyxGL, a lightweight C++ template library for OpenGL  //
+// This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
 // Copyright (C) 2010, 2011 Alexandru Duliu                                   //
 //                                                                            //
-// nyxGL is free software; you can redistribute it and/or                     //
+// nyx is free software; you can redistribute it and/or                       //
 // modify it under the terms of the GNU Lesser General Public                 //
 // License as published by the Free Software Foundation; either               //
 // version 3 of the License, or (at your option) any later version.           //
 //                                                                            //
-// nyxGL is distributed in the hope that it will be useful, but WITHOUT ANY   //
+// nyx is distributed in the hope that it will be useful, but WITHOUT ANY     //
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  //
 // FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the //
 // GNU General Public License for more details.                               //
 //                                                                            //
 // You should have received a copy of the GNU Lesser General Public           //
-// License along with nyxGL. If not, see <http://www.gnu.org/licenses/>.      //
+// License along with nyx. If not, see <http://www.gnu.org/licenses/>.        //
 //                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -65,18 +65,18 @@ public:
     virtual void bind();
     virtual void unbind();
 
-    unsigned int getIdentifier();
-    unsigned int getCount();
-    unsigned int getSize();
-    bool isValid();
+    unsigned int id();
+    unsigned int count();
+    unsigned int size();
+    bool is_valid();
 
 protected:
-    virtual void setComponents( unsigned int components ) = 0;
-    void setUsage( unsigned int usage );
+    virtual void set_components( unsigned int components ) = 0;
+    void set_usage( unsigned int usage );
 
-    void setSize( unsigned int size );
-    void setTarget( unsigned int target );
-    void setState( unsigned int state );
+    void set_size( unsigned int size );
+    void set_target( unsigned int target );
+    void set_state( unsigned int state );
 
 
 protected:
@@ -124,8 +124,8 @@ inline buffer<T>::~buffer()
 template <typename T>
 inline void buffer<T>::configure( unsigned int components, unsigned int usage )
 {
-    setComponents(components);
-    setUsage(usage);
+    set_components(components);
+    set_usage(usage);
     m_configured = true;
 }
 
@@ -206,35 +206,35 @@ inline void buffer<T>::unbind()
 
 
 template <typename T>
-inline unsigned int buffer<T>::getIdentifier()
+inline unsigned int buffer<T>::id()
 {
     return m_identifier;
 }
 
 
 template <typename T>
-inline unsigned int buffer<T>::getCount()
+inline unsigned int buffer<T>::count()
 {
     return m_count;
 }
 
 
 template <typename T>
-inline unsigned int buffer<T>::getSize()
+inline unsigned int buffer<T>::size()
 {
     return m_size;
 }
 
 
 template <typename T>
-inline bool buffer<T>::isValid()
+inline bool buffer<T>::is_valid()
 {
     return m_valid;
 }
 
 
 template <typename T>
-inline void buffer<T>::setUsage( unsigned int usage )
+inline void buffer<T>::set_usage( unsigned int usage )
 {
     // check the buffer usage
     switch( usage )
@@ -258,19 +258,19 @@ inline void buffer<T>::setUsage( unsigned int usage )
 
 
 template <typename T>
-inline void buffer<T>::setSize( unsigned int size )
+inline void buffer<T>::set_size( unsigned int size )
 {
     m_size = size;
 }
 
 template <typename T>
-inline void buffer<T>::setTarget( unsigned int target )
+inline void buffer<T>::set_target( unsigned int target )
 {
     m_target = target;
 }
 
 template <typename T>
-inline void buffer<T>::setState( unsigned int state )
+inline void buffer<T>::set_state( unsigned int state )
 {
     m_state = state;
 }

@@ -1,21 +1,21 @@
  ///////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is part of nyxGL, a lightweight C++ template library for OpenGL  //
+// This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
 // Copyright (C) 2010, 2011 Alexandru Duliu                                   //
 //                                                                            //
-// nyxGL is free software; you can redistribute it and/or                     //
+// nyx is free software; you can redistribute it and/or                       //
 // modify it under the terms of the GNU Lesser General Public                 //
 // License as published by the Free Software Foundation; either               //
 // version 3 of the License, or (at your option) any later version.           //
 //                                                                            //
-// nyxGL is distributed in the hope that it will be useful, but WITHOUT ANY   //
+// nyx is distributed in the hope that it will be useful, but WITHOUT ANY     //
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  //
 // FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the //
 // GNU General Public License for more details.                               //
 //                                                                            //
 // You should have received a copy of the GNU Lesser General Public           //
-// License along with nyxGL. If not, see <http://www.gnu.org/licenses/>.      //
+// License along with nyx. If not, see <http://www.gnu.org/licenses/>.        //
 //                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -45,11 +45,12 @@ public:
     texture();
     virtual ~texture();
 
-    void setFormats( unsigned int internalFormat, unsigned int externalFormat );
+    void set_format( unsigned int format );
+    void set_format( unsigned int internalFormat, unsigned int externalFormat );
 
-    void setData( unsigned int width, const T *pixels=0 );
-    void setData( unsigned int width, unsigned int height, const T *pixels=0 );
-    void setData( unsigned int width, unsigned int height, unsigned int depth, const T *pixels=0 );
+    void set_data( unsigned int width, const T *pixels );
+    void set_data( unsigned int width, unsigned int height, const T *pixels );
+    void set_data( unsigned int width, unsigned int height, unsigned int depth, const T *pixels );
 
     void update( const T *pixels );
     void update();
@@ -57,22 +58,22 @@ public:
     void bind();
     void unbind();
 
-    unsigned int getWidth() const;
-    unsigned int getHeight() const;
-    unsigned int getDepth() const;
+    unsigned int width() const;
+    unsigned int height() const;
+    unsigned int depth() const;
 
-    unsigned int getInternalFormat() const;
-    unsigned int getExternalFormat() const;
-    unsigned int getIdentifier() const;
+    unsigned int internal_format() const;
+    unsigned int external_format() const;
+    unsigned int id() const;
 
 protected:
-    void initTexture();
-    static unsigned int getChannelCount( unsigned int format );
+    void init();
 
 protected:
     // texture data
     const T *m_pixels;
     unsigned int m_size[3];
+
 
     // openGL relevant information
     unsigned int m_type;
@@ -107,46 +108,53 @@ inline texture<T>::~texture()
 
 
 template <typename T>
-inline void texture<T>::setData( unsigned int width, const T *pixels )
+inline void texture<T>::set_data( unsigned int width, const T *pixels )
 {
-    m_pixels = pixels;
     m_size[0] = width;
     m_size[1] = 1;
     m_size[2] = 1;
+    m_pixels = pixels;
     m_type = GL_TEXTURE_1D;
 
-    initTexture();
+    init();
 }
 
 
 template <typename T>
-inline void texture<T>::setData( unsigned int width, unsigned int height, const T *pixels )
+inline void texture<T>::set_data( unsigned int width, unsigned int height, const T *pixels )
 {
-    m_pixels = pixels;
     m_size[0] = width;
     m_size[1] = height;
     m_size[2] = 1;
+    m_pixels = pixels;
     m_type = GL_TEXTURE_2D;
 
-    initTexture();
+    init();
 }
 
 
 template <typename T>
-inline void texture<T>::setData( unsigned int width, unsigned int height, unsigned int depth, const T *pixels )
+inline void texture<T>::set_data( unsigned int width, unsigned int height, unsigned int depth, const T *pixels )
 {
-    m_pixels = pixels;
     m_size[0] = width;
     m_size[1] = height;
     m_size[2] = depth;
     m_type = GL_TEXTURE_3D;
 
-    initTexture();
+    init();
 }
 
 
 template <typename T>
-inline void texture<T>::setFormats( unsigned int internalFormat, unsigned int externalFormat )
+inline void texture<T>::set_format( unsigned int format )
+{
+    m_internalFormat = format;
+    m_externalFormat = format;
+}
+
+
+template <typename T>
+inline void texture<T>::set_format( unsigned int internalFormat, unsigned int externalFormat )
 {
     m_internalFormat = internalFormat;
     m_externalFormat = externalFormat;
@@ -169,12 +177,16 @@ inline void texture<T>::update()
     T *pixels;
     if( noData )
     {
-        std::size_t length = m_size[0]*m_size[1]*m_size[2]*getChannelCount(m_externalFormat);
+        std::size_t length = m_size[0]*m_size[1]*m_size[2]* util::channels( m_externalFormat );
         pixels = new T[ length ];
         m_pixels = pixels;
         for( size_t i=0; i<length; i++ )
             pixels[i]=0;
     }
+
+    // set the row stride
+    //glPixelStorei(GL_UNPACK_ROW_LENGTH,m_stride);
+    glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
     // bind the texture
     bind();
@@ -183,15 +195,39 @@ inline void texture<T>::update()
     switch(m_type)
     {
         case GL_TEXTURE_1D :
-            glTexImage1D (m_type, 0, m_internalFormat, m_size[0], 0, m_externalFormat, util::Type<T>::getGL(), m_pixels);
+            glTexImage1D ( m_type,
+                           0,
+                           m_internalFormat,
+                           static_cast<GLsizei>(m_size[0]),
+                           0,
+                           m_externalFormat,
+                           util::type<T>::GL(),
+                           m_pixels );
             break;
 
         case GL_TEXTURE_2D :
-            glTexImage2D (m_type, 0, m_internalFormat, m_size[0], m_size[1], 0, m_externalFormat, util::Type<T>::getGL(), m_pixels);
+            glTexImage2D ( m_type,
+                           0,
+                           m_internalFormat,
+                           static_cast<GLsizei>(m_size[0]),
+                           static_cast<GLsizei>(m_size[1]),
+                           0,
+                           m_externalFormat,
+                           util::type<T>::GL(),
+                           m_pixels );
             break;
 
         case GL_TEXTURE_3D :
-            glTexImage3D (m_type, 0, m_internalFormat, m_size[0], m_size[1], m_size[2], 0, m_externalFormat, util::Type<T>::getGL(), m_pixels);
+            glTexImage3D ( m_type,
+                           0,
+                           m_internalFormat,
+                           static_cast<GLsizei>(m_size[0]),
+                           static_cast<GLsizei>(m_size[1]),
+                           static_cast<GLsizei>(m_size[2]),
+                           0,
+                           m_externalFormat,
+                           util::type<T>::GL(),
+                           m_pixels);
             break;
     }
 
@@ -222,7 +258,7 @@ inline void texture<T>::unbind()
 
 
 template <typename T>
-inline void texture<T>::initTexture()
+inline void texture<T>::init()
 {
     // delete if necessary old texture
     if( m_identifier != 0 )
@@ -259,66 +295,44 @@ inline void texture<T>::initTexture()
 
 
 template<typename T>
-inline unsigned int texture<T>::getWidth() const
+inline unsigned int texture<T>::width() const
 {
     return m_size[0];
 }
 
 
 template<typename T>
-inline unsigned int texture<T>::getHeight() const
+inline unsigned int texture<T>::height() const
 {
     return m_size[1];
 }
 
 
 template<typename T>
-inline unsigned int texture<T>::getDepth() const
+inline unsigned int texture<T>::depth() const
 {
     return m_size[2];
 }
 
 
 template<typename T>
-inline unsigned int texture<T>::getInternalFormat() const
+inline unsigned int texture<T>::internal_format() const
 {
     return m_internalFormat;
 }
 
 
 template<typename T>
-inline unsigned int texture<T>::getExternalFormat() const
+inline unsigned int texture<T>::external_format() const
 {
     return m_externalFormat;
 }
 
 
 template<typename T>
-inline unsigned int texture<T>::getIdentifier() const
+inline unsigned int texture<T>::id() const
 {
     return m_identifier;
-}
-
-
-template<typename T>
-inline unsigned int texture<T>::getChannelCount( unsigned int format )
-{
-    switch( format )
-    {
-        case GL_COLOR_INDEX : 		return 1; break;
-        case GL_RED :  				return 1; break;
-        case GL_GREEN :  			return 1; break;
-        case GL_BLUE :  			return 1; break;
-        case GL_ALPHA :  			return 1; break;
-        case GL_INTENSITY : 		return 1; break;
-        case GL_RGB : 				return 3; break;
-        case GL_BGR : 				return 3; break;
-        case GL_RGBA : 				return 4; break;
-        case GL_BGRA : 				return 4; break;
-        case GL_LUMINANCE : 		return 1; break;
-        case GL_LUMINANCE_ALPHA :	return 2; break;
-        case GL_DEPTH_COMPONENT :	return 1; break;
-    }
 }
 
 

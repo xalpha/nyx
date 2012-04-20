@@ -1,21 +1,21 @@
  ///////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is part of nyxGL, a lightweight C++ template library for OpenGL  //
+// This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
 // Copyright (C) 2010, 2011 Alexandru Duliu                                   //
 //                                                                            //
-// nyxGL is free software; you can redistribute it and/or                     //
+// nyx is free software; you can redistribute it and/or                       //
 // modify it under the terms of the GNU Lesser General Public                 //
 // License as published by the Free Software Foundation; either               //
 // version 3 of the License, or (at your option) any later version.           //
 //                                                                            //
-// nyxGL is distributed in the hope that it will be useful, but WITHOUT ANY   //
+// nyx is distributed in the hope that it will be useful, but WITHOUT ANY     //
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  //
 // FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the //
 // GNU General Public License for more details.                               //
 //                                                                            //
 // You should have received a copy of the GNU Lesser General Public           //
-// License along with nyxGL. If not, see <http://www.gnu.org/licenses/>.      //
+// License along with nyx. If not, see <http://www.gnu.org/licenses/>.        //
 //                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,16 +51,16 @@ public:
 protected:
     void link();
 
-    void printProgramInfo();
+    void print_program_info();
 
 protected:
     // program
     unsigned int m_id;
     bool m_loaded;
 
-    Shader<V> m_vertexShader;
-    Shader<F> m_fragmentShader;
-    Shader<G> m_geometryShader;
+    shader<V> m_vertexShader;
+    shader<F> m_fragmentShader;
+    shader<G> m_geometryShader;
 };
 
 
@@ -99,10 +99,10 @@ inline void program<V,F,G>::load( const std::string &src, shader_type type )
 
     // check if all the source files are in
     bool loaded = true;
-    loaded = loaded && m_vertexShader.isLoaded();
-    loaded = loaded && m_fragmentShader.isLoaded();
+    loaded = loaded && m_vertexShader.is_loaded();
+    loaded = loaded && m_fragmentShader.is_loaded();
     if( G == geometry )
-    loaded = loaded && m_geometryShader.isLoaded();
+    loaded = loaded && m_geometryShader.is_loaded();
 
     // if all here link
     if( loaded )
@@ -132,10 +132,10 @@ template<shader_type V, shader_type F, shader_type G>
 inline void program<V,F,G>::link()
 {
     // attach shaders
-    glAttachShader(m_id, m_vertexShader.getID());
-    glAttachShader(m_id, m_fragmentShader.getID());
+    glAttachShader(m_id, m_vertexShader.id());
+    glAttachShader(m_id, m_fragmentShader.id());
     if( G == geometry )
-       glAttachShader(m_id, m_geometryShader.getID());
+       glAttachShader(m_id, m_geometryShader.id());
 
     // link everything
     glLinkProgram(m_id);
@@ -143,12 +143,12 @@ inline void program<V,F,G>::link()
     // validate Program
     //glValidateProgram(m_id);
 
-    printProgramInfo();
+    print_program_info();
 }
 
 
 template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::printProgramInfo()
+inline void program<V,F,G>::print_program_info()
 {
     int logLength = 0;
     glGetObjectParameterivARB(m_id, GL_OBJECT_INFO_LOG_LENGTH_ARB, &logLength);

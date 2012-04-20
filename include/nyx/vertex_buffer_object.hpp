@@ -1,21 +1,21 @@
  ///////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is part of nyxGL, a lightweight C++ template library for OpenGL  //
+// This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
 // Copyright (C) 2010, 2011 Alexandru Duliu                                   //
 //                                                                            //
-// nyxGL is free software; you can redistribute it and/or                     //
+// nyx is free software; you can redistribute it and/or                       //
 // modify it under the terms of the GNU Lesser General Public                 //
 // License as published by the Free Software Foundation; either               //
 // version 3 of the License, or (at your option) any later version.           //
 //                                                                            //
-// nyxGL is distributed in the hope that it will be useful, but WITHOUT ANY   //
+// nyx is distributed in the hope that it will be useful, but WITHOUT ANY     //
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  //
 // FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the //
 // GNU General Public License for more details.                               //
 //                                                                            //
 // You should have received a copy of the GNU Lesser General Public           //
-// License along with nyxGL. If not, see <http://www.gnu.org/licenses/>.      //
+// License along with nyx. If not, see <http://www.gnu.org/licenses/>.        //
 //                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -138,9 +138,9 @@ inline void vertex_buffer_object<Ta, Te>::initVertices( const Ta *vertices, unsi
 template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initNormals( const Ta *normals)
 {
-    if( m_vertices.getCount() > 0 )
+    if( m_vertices.count() > 0 )
     {
-        m_normals.init(normals, m_vertices.getCount());
+        m_normals.init(normals, m_vertices.count());
     }
 }
 
@@ -148,9 +148,9 @@ inline void vertex_buffer_object<Ta, Te>::initNormals( const Ta *normals)
 template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initColors( const Ta *colors)
 {
-    if( m_vertices.getCount() > 0 )
+    if( m_vertices.count() > 0 )
     {
-        m_colors.init(colors, m_vertices.getCount());
+        m_colors.init(colors, m_vertices.count());
     }
 }
 
@@ -158,9 +158,9 @@ inline void vertex_buffer_object<Ta, Te>::initColors( const Ta *colors)
 template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initTexCoords( const Ta *texCoords)
 {
-    if( m_vertices.getCount() > 0 )
+    if( m_vertices.count() > 0 )
     {
-        m_texCoords.init(texCoords, m_vertices.getCount());
+        m_texCoords.init(texCoords, m_vertices.count());
     }
 }
 
@@ -211,27 +211,27 @@ updateElements();
 template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::draw()
 {
-    if( m_vertices.isValid() )
+    if( m_vertices.is_valid() )
         m_vertices.bind();
     else
         return;
 
-    if( m_normals.isValid() )
+    if( m_normals.is_valid() )
         m_normals.bind();
 
-    if( m_colors.isValid() )
+    if( m_colors.is_valid() )
         m_colors.bind();
 
-    if( m_texCoords.isValid() )
+    if( m_texCoords.is_valid() )
         m_texCoords.bind();
 
-    if( m_elements.isValid() )
+    if( m_elements.is_valid() )
     {
         m_elements.bind();
-        glDrawElements( m_elements.getPrimitiveType(), m_elements.getCount()*m_elements.getSize(), util::type<Te>::getGL(), 0 );
+        glDrawElements( m_elements.getPrimitiveType(), m_elements.count()*m_elements.size(), util::type<Te>::GL(), 0 );
     }
     else
-        glDrawArrays( m_elements.getPrimitiveType(), 0, m_vertices.getCount());
+        glDrawArrays( m_elements.getPrimitiveType(), 0, m_vertices.count());
 
     m_vertices.unbind();
     m_normals.unbind();
