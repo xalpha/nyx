@@ -27,6 +27,12 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
+# set some variabiles
+set( CMAKE_BUILD_TYPE Debug )
+if( NOT WIN32 )
+    set( BUILD_SHARED_LIBS TRUE )
+endif()
+
 # configure the project
 include( NyxConfig.cmake )
 
@@ -41,6 +47,7 @@ list( APPEND Nyx_INC
     include/nyx/normal_array_buffer.hpp
     include/nyx/program.hpp
     include/nyx/shader.hpp
+    include/nyx/test.hpp
     include/nyx/texcoord_array_buffer.hpp
     include/nyx/texture.hpp
     include/nyx/util.hpp
@@ -65,3 +72,10 @@ set_target_properties(${Nyx_TARGET}
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
 
 install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
+
+
+# enable testing
+ENABLE_TESTING()
+
+# add tests
+add_subdirectory(test)
