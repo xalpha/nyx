@@ -19,44 +19,58 @@
 #                                                                            #
 ##############################################################################
 
-cmake_minimum_required(VERSION 2.8)
-project(Nyx)
+# Config file for the nyx library
+# It defines the following variables
+#
+# Nyx_INCLUDE_DIR - include directory for nyx headers
+# Nyx_INCLUDE_DIRS - all include directories nyx needs
+# Nyx_Nyx_LINK_LIBRARIES - all include directories nyx needs
 
-# guard against in-source builds
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-  message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
+# set path
+set( Nyx_DIR ${CMAKE_CURRENT_LIST_DIR})
+set( ENV{Nyx_DIR} ${Nyx_DIR} )
+
+# add module paths
+list( APPEND CMAKE_MODULE_PATH ${Nyx_DIR}/cmake ${CMAKE_INSTALL_PREFIX}/share )
+
+# find GLEW
+find_package( GLEW )
+
+# set the include dir
+set( Nyx_INCLUDE_DIR "${Nyx_DIR}/include")
+
+# set target names
+set( Nyx_TARGET nyx )
+
+# set compile definitions
+set( Nyx_COMPILE_DEFINITIONS NYX CACHE INTERNAL "all compile definitions nyx needs"  )
+
+# set linker flags
+if( WIN32 )
+	list( APPEND Nyx_LINK_FLAGS " /MANIFEST:NO" )
 endif()
 
-# configure the project
-include( NyxConfig.cmake )
-
-# add the include files
-list( APPEND Nyx_INC
-    include/nyx/buffer.hpp
-    include/nyx/exception.hpp
-    include/nyx/frame_buffer_object.hpp
-    include/nyx/program.hpp
-    include/nyx/shader.hpp
-    include/nyx/texture.hpp
-    include/nyx/util.hpp
-    include/nyx/vertex_buffer_object.hpp
-    include/nyx/buffer/array_buffer.hpp
-    include/nyx/buffer/color_array_buffer.hpp
-    include/nyx/buffer/element_buffer.hpp
-    include/nyx/buffer/normal_array_buffer.hpp
-    include/nyx/buffer/texcoord_array_buffer.hpp
-    include/nyx/buffer/vertex_array_buffer.hpp )
-
 # set include directories
-include_directories( ${Nyx_INCLUDE_DIRS} )
+set( Nyx_INCLUDE_DIRS
+    ${Nyx_INCLUDE_DIR}
+    ${Nyx_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
 
-# add the target
-add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
+# link libraries
+set( Nyx_LINK_LIBRARIES
+    -lm
+    -lc
+    ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
 
-# configure target
-set_target_properties(${Nyx_TARGET}
-    PROPERTIES
-        PUBLIC_HEADER "${Nyx_INC}"
-        COMPILE_DEFINITIONS "${Nyx_COMPILE_DEFINITIONS}"
-        COMPILE_FLAGS "${Nyx_COMPILE_FLAGS}"
-        LINK_FLAGS "${Nyx_LINK_FLAGS}" )
+
+# enable C++11 support
+if( NOT WIN32 )
+    if( CMAKE_COMPILER_IS_GNUCXX )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++0x")
+    else( CMAKE_COMPILER_IS_GNUCXX )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Qunused-arguments")
+    endif()
+endif()
+
+
+
