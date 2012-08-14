@@ -30,7 +30,7 @@ namespace nyx
 {
 
 /*
- * buffer.h
+ * buffer.hpp
  *
  *  Created on: May 22, 2010
  *      Author: alex

@@ -30,7 +30,7 @@ namespace nyx
 {
 
 /*
- * texture.h
+ * texture.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

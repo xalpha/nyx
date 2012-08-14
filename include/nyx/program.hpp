@@ -29,7 +29,7 @@ namespace nyx
 {
 
 /*
- * program.h
+ * program.hpp
  *
  *  Created on: May 22, 2010
  *      Author: alex

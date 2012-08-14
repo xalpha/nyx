@@ -36,7 +36,7 @@ namespace nyx
 {
 
 /*
- * vertex_buffer_object.h
+ * vertex_buffer_object.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

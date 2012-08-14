@@ -34,7 +34,7 @@ namespace nyx
 {
 
 /*
- * shader.h
+ * shader.hpp
  *
  *  Created on: May 22, 2010
  *      Author: alex

@@ -24,7 +24,7 @@
 #include <stdexcept>
 
 /*
- * Exceptions.h
+ * Exceptions.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

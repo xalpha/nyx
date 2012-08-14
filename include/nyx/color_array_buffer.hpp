@@ -27,7 +27,7 @@ namespace nyx
 {
 
 /*
- * color_array_buffer.h
+ * color_array_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

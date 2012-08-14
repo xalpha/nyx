@@ -30,7 +30,7 @@ namespace nyx
 {
 
 /*
- * frame_buffer_objects.h
+ * frame_buffer_objects.hpp
  *
  *  Created on: June 28, 2010
  *      Author: alex
