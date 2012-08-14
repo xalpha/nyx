@@ -32,20 +32,20 @@ include( NyxConfig.cmake )
 
 # add the include files
 list( APPEND Nyx_INC
+    include/nyx/array_buffer.hpp
     include/nyx/buffer.hpp
+    include/nyx/color_array_buffer.hpp
+    include/nyx/element_buffer.hpp
     include/nyx/exception.hpp
     include/nyx/frame_buffer_object.hpp
+    include/nyx/normal_array_buffer.hpp
     include/nyx/program.hpp
     include/nyx/shader.hpp
+    include/nyx/texcoord_array_buffer.hpp
     include/nyx/texture.hpp
     include/nyx/util.hpp
-    include/nyx/vertex_buffer_object.hpp
-    include/nyx/buffer/array_buffer.hpp
-    include/nyx/buffer/color_array_buffer.hpp
-    include/nyx/buffer/element_buffer.hpp
-    include/nyx/buffer/normal_array_buffer.hpp
-    include/nyx/buffer/texcoord_array_buffer.hpp
-    include/nyx/buffer/vertex_array_buffer.hpp )
+    include/nyx/vertex_array_buffer.hpp
+    include/nyx/vertex_buffer_object.hpp )
 
 # set include directories
 include_directories( ${Nyx_INCLUDE_DIRS} )
@@ -60,3 +60,8 @@ set_target_properties(${Nyx_TARGET}
         COMPILE_DEFINITIONS "${Nyx_COMPILE_DEFINITIONS}"
         COMPILE_FLAGS "${Nyx_COMPILE_FLAGS}"
         LINK_FLAGS "${Nyx_LINK_FLAGS}" )
+
+# install module finder
+install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
+
+install(FILES ${Nyx_INC} DESTINATION "include/nyx" )

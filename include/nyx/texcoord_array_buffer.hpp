@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <nyx/buffer/array_buffer.hpp>
+#include <nyx/array_buffer.hpp>
 
 namespace nyx
 {
