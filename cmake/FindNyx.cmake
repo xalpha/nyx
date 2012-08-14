@@ -19,45 +19,50 @@
 #                                                                            #
 ##############################################################################
 
-cmake_minimum_required(VERSION 2.8)
-project(Nyx)
+#  Try to find Nyx
+#
+#  Nyx_FOUND - System has Nyx
+#  Nyx_INCLUDE_DIRS - The Nyx include directories
+#  Nyx_LIBRARIES - All libraries Nyx needs
 
-# guard against in-source builds
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-  message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
+
+# try to find the include dir
+find_path( Nyx_INCLUDE_DIR 
+    NAMES
+        nyx/CameraCalibration.hpp
+        nyx/Finder.hpp
+    PATHS
+	    $ENV{Nyx_DIR}/include
+	    %{CMAKE_INSTALL_PREFIX}/include
+        /usr/include
+        /usr/local/include
+        /opt/include
+        /opt/local/install
+    PATH_SUFFIXES
+        nyx )
+
+# check if this is a valid component
+if( TARGET ${Nyx_INCLUDE_DIR} )
+    # include the component
+    MESSAGE( STATUS "Nyx found.")
+else()
+    MESSAGE( FATAL_ERROR "Nyx target not available.")
 endif()
 
-# configure the project
-include( NyxConfig.cmake )
+# set the include dirs
+set( Nyx_INCLUDE_DIRS 
+    ${Nyx_INCLUDE_DIR}
+    ${Nyx_INCLUDE_DIR}/nyx )
+    
+    
+#####
+## Dependencies
+###
 
-# add the include files
-list( APPEND Nyx_INC
-    include/nyx/array_buffer.hpp
-    include/nyx/buffer.hpp
-    include/nyx/color_array_buffer.hpp
-    include/nyx/element_buffer.hpp
-    include/nyx/exception.hpp
-    include/nyx/frame_buffer_object.hpp
-    include/nyx/normal_array_buffer.hpp
-    include/nyx/program.hpp
-    include/nyx/shader.hpp
-    include/nyx/texcoord_array_buffer.hpp
-    include/nyx/texture.hpp
-    include/nyx/util.hpp
-    include/nyx/vertex_array_buffer.hpp
-    include/nyx/vertex_buffer_object.hpp )
+# find GLEW
+if( NOT GLEW_FOUND )
+    find_package( GLEW REQUIRED )
+endif()
+list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
+list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
 
-# set include directories
-include_directories( ${Nyx_INCLUDE_DIRS} )
-
-# add the target
-add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
-
-
-# find libraries
-find_package( GLEW )
-
-# install module finder
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
-
-install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
