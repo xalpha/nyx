@@ -19,54 +19,50 @@
 #                                                                            #
 ##############################################################################
 
-# Config file for the nyx library
-# It defines the following variables
+#  Try to find Nyx
 #
-# Nyx_INCLUDE_DIR - include directory for nyx headers
-# Nyx_INCLUDE_DIRS - all include directories nyx needs
-# Nyx_Nyx_LINK_LIBRARIES - all include directories nyx needs
+#  Nyx_FOUND - System has Nyx
+#  Nyx_INCLUDE_DIRS - The Nyx include directories
+#  Nyx_LIBRARIES - All libraries Nyx needs
 
-# set path
-set( Nyx_DIR ${CMAKE_CURRENT_LIST_DIR})
-set( ENV{Nyx_DIR} ${Nyx_DIR} )
 
-# add module paths
-list( APPEND CMAKE_MODULE_PATH ${Nyx_DIR}/cmake ${CMAKE_INSTALL_PREFIX}/share )
+# try to find the include dir
+find_path( Nyx_INCLUDE_DIR 
+    NAMES
+        nyx/CameraCalibration.hpp
+        nyx/Finder.hpp
+    PATHS
+	    $ENV{Nyx_DIR}/include
+	    %{CMAKE_INSTALL_PREFIX}/include
+        /usr/include
+        /usr/local/include
+        /opt/include
+        /opt/local/install
+    PATH_SUFFIXES
+        nyx )
 
-# find GLEW
-find_package( GLEW )
-
-# set the include dir
-set( Nyx_INCLUDE_DIR "${Nyx_DIR}/include")
-
-# set target names
-set( Nyx_TARGET nyx )
-
-# set compile definitions
-set( Nyx_COMPILE_DEFINITIONS NYX CACHE INTERNAL "all compile definitions nyx needs"  )
-
-# set linker flags
-if( WIN32 )
-    list( APPEND Nyx_LINK_FLAGS " /MANIFEST:NO" )
+# check if this is a valid component
+if( TARGET ${Nyx_INCLUDE_DIR} )
+    # include the component
+    MESSAGE( STATUS "Nyx found.")
+else()
+    MESSAGE( FATAL_ERROR "Nyx target not available.")
 endif()
 
-# set include directories
-set( Nyx_INCLUDE_DIRS
+# set the include dirs
+set( Nyx_INCLUDE_DIRS 
     ${Nyx_INCLUDE_DIR}
-    ${Nyx_INCLUDE_DIRS}
-    ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
+    ${Nyx_INCLUDE_DIR}/nyx )
+    
+    
+#####
+## Dependencies
+###
 
-# link libraries
-set( Nyx_LINK_LIBRARIES ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
-
-# enable C++11 support
-#if( NOT WIN32 )
-#    if( CMAKE_COMPILER_IS_GNUCXX )
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++0x")
-#    else( CMAKE_COMPILER_IS_GNUCXX )
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Qunused-arguments")
-#    endif()
-#endif()
-
-
+# find GLEW
+if( NOT GLEW_FOUND )
+    find_package( GLEW REQUIRED )
+endif()
+list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
+list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
 
