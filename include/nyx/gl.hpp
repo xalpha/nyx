@@ -37,7 +37,6 @@ namespace nyx
 namespace gl
 {
 
-
 //template <typename T> inline void glColor3b (GLbyte red, GLbyte green, GLbyte blue);
 //template <typename T> inline void glColor3bv (const GLbyte *v);
 
@@ -93,7 +92,5 @@ template <> inline void Translate (double x, double y, double z){ glTranslated(x
 
 //template <typename T> inline void glVertex4d (GLdouble x, GLdouble y, GLdouble z, GLdouble w);
 //template <typename T> inline void glVertex4dv (const GLdouble *v);
-
-
 
 } // end namespace gl
