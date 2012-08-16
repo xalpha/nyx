@@ -24,7 +24,7 @@
 #
 # Nyx_INCLUDE_DIR - include directory for nyx headers
 # Nyx_INCLUDE_DIRS - all include directories nyx needs
-# Nyx_Nyx_LINK_LIBRARIES - all include directories nyx needs
+# Nyx_LINK_LIBRARIES - all include directories nyx needs
 
 # set path
 set( Nyx_DIR ${CMAKE_CURRENT_LIST_DIR})

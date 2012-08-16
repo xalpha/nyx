@@ -37,12 +37,12 @@ find_path( Nyx_INCLUDE_DIR
         /usr/include
         /usr/local/include
         /opt/include
-        /opt/local/install
+        /opt/local/include
     PATH_SUFFIXES
         nyx )
 
 # check if this is a valid component
-if( TARGET ${Nyx_INCLUDE_DIR} )
+if( Nyx_INCLUDE_DIR )
     # include the component
     MESSAGE( STATUS "Nyx found.")
 else()

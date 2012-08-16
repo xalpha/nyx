@@ -54,9 +54,6 @@ include_directories( ${Nyx_INCLUDE_DIRS} )
 # add the target
 add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
 
-# find libraries
-find_package( GLEW )
-
 # install
 install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
