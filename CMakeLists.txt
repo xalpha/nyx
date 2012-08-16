@@ -4,18 +4,18 @@
 #                                                                            #
 # Copyright (C) 2012 Alexandru Duliu                                         #
 #                                                                            #
-# nxy is free software; you can redistribute it and/or                       #
+# nyx is free software; you can redistribute it and/or                       #
 # modify it under the terms of the GNU Lesser General Public                 #
 # License as published by the Free Software Foundation; either               #
 # version 3 of the License, or (at your option) any later version.           #
 #                                                                            #
-# nxy is distributed in the hope that it will be useful, but WITHOUT ANY     #
+# nyx is distributed in the hope that it will be useful, but WITHOUT ANY     #
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  #
 # FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the #
 # GNU General Public License for more details.                               #
 #                                                                            #
 # You should have received a copy of the GNU Lesser General Public           #
-# License along with nxy. If not, see <http://www.gnu.org/licenses/>.        #
+# License along with nyx. If not, see <http://www.gnu.org/licenses/>.        #
 #                                                                            #
 ##############################################################################
 
@@ -53,15 +53,9 @@ include_directories( ${Nyx_INCLUDE_DIRS} )
 # add the target
 add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
 
-# configure target
-set_target_properties(${Nyx_TARGET}
-    PROPERTIES
-        PUBLIC_HEADER "${Nyx_INC}"
-        COMPILE_DEFINITIONS "${Nyx_COMPILE_DEFINITIONS}"
-        COMPILE_FLAGS "${Nyx_COMPILE_FLAGS}"
-        LINK_FLAGS "${Nyx_LINK_FLAGS}" )
+# find libraries
+find_package( GLEW )
 
-# install module finder
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
-
+# install
 install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
+install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
