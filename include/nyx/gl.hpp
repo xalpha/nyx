@@ -64,9 +64,11 @@ template <typename T> inline void ClearColor (T red, T green, T blue, T alpha){ 
                                                                                               static_cast<GLclampf>(blue),
                                                                                               static_cast<GLclampf>(alpha) ); }
 
+
 template <typename T> inline void LoadMatrix (const T *m);
 template <> inline void LoadMatrix (const float *m) { glLoadMatrixf(m); }
 template <> inline void LoadMatrix (const double *m){ glLoadMatrixd(m); }
+
 
 template <typename T> inline void MultMatrix (const T *m);
 template <float> inline void MultMatrix (const float *m) { glMultMatrixf(m); }
