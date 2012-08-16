@@ -38,6 +38,7 @@ list( APPEND Nyx_INC
     include/nyx/element_buffer.hpp
     include/nyx/exception.hpp
     include/nyx/frame_buffer_object.hpp
+    include/nyx/gl.hpp
     include/nyx/normal_array_buffer.hpp
     include/nyx/program.hpp
     include/nyx/shader.hpp

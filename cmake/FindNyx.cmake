@@ -1,6 +1,6 @@
 ##############################################################################
 #                                                                            #
-# This file is part of nyx, a lightweight C++ template library for OpenGL    #
+# This file is part of nyx, a lightweight C++ template visualization library #
 #                                                                            #
 # Copyright (C) 2012 Alexandru Duliu                                         #
 #                                                                            #
@@ -58,11 +58,4 @@ set( Nyx_INCLUDE_DIRS
 #####
 ## Dependencies
 ###
-
-# find GLEW
-if( NOT GLEW_FOUND )
-    find_package( GLEW REQUIRED )
-endif()
-list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
-list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
 
