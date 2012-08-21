@@ -48,16 +48,16 @@ template <> inline void Color3 (float red, float green, float blue)   { glColor3
 template <> inline void Color3 (double red, double green, double blue){ glColor3d(red,green,blue); }
 
 template <typename T> inline void Color3 (const T *v);
-template <typename T> inline void Color3 (const float *v) { glColor3fv(v); }
-template <typename T> inline void Color3 (const double *v){ glColor3dv(v); }
+template <> inline void Color3 (const float *v) { glColor3fv(v); }
+template <> inline void Color3 (const double *v){ glColor3dv(v); }
 
 template <typename T> inline void Color4 (T red, T green, T blue, T alpha);
 template <> inline void Color4 (float red, float green, float blue, float alpha)    { glColor4f(red,green,blue,alpha); }
 template <> inline void Color4 (double red, double green, double blue, double alpha){ glColor4d(red,green,blue,alpha); }
 
 template <typename T> inline void Color4 (const T *v);
-template <typename T> inline void Color4 (const float *v) { glColor4fv(v); }
-template <typename T> inline void Color4 (const double *v){ glColor4dv(v); }
+template <> inline void Color4 (const float *v) { glColor4fv(v); }
+template <> inline void Color4 (const double *v){ glColor4dv(v); }
 
 //template <typename T> inline void glGetDoublev (GLenum pname, GLdouble *params);
 //template <typename T> inline void glGetIntegerv (GLenum pname, GLint *params);
@@ -116,27 +116,27 @@ template <typename T> inline void Vertex2 (T x, T y);
 template <> inline void Vertex2 (float x, float y)  { glVertex2f(x,y); }
 template <> inline void Vertex2 (double x, double y){ glVertex2d(x,y); }
 
-template <typename T> inline void Vertex2v (const T *v);
-template <> inline void Vertex2v (const float *v) { glVertex2fv(v); }
-template <> inline void Vertex2v (const double *v){ glVertex2dv(v); }
+template <typename T> inline void Vertex2 (const T *v);
+template <> inline void Vertex2 (const float *v) { glVertex2fv(v); }
+template <> inline void Vertex2 (const double *v){ glVertex2dv(v); }
 
 
 template <typename T> inline void Vertex3 (T x, T y, T z);
 template <> inline void Vertex3 (float x, float y, float z)  { glVertex3f(x,y,z); }
 template <> inline void Vertex3 (double x, double y, double z){ glVertex3d(x,y,z); }
 
-template <typename T> inline void Vertex3v (const T *v);
-template <> inline void Vertex3v (const float *v) { glVertex3fv(v); }
-template <> inline void Vertex3v (const double *v){ glVertex3dv(v); }
+template <typename T> inline void Vertex3 (const T *v);
+template <> inline void Vertex3 (const float *v) { glVertex3fv(v); }
+template <> inline void Vertex3 (const double *v){ glVertex3dv(v); }
 
 
 template <typename T> inline void Vertex4 (T x, T y, T z, T w);
 template <> inline void Vertex4 (float x, float y, float z, float w)  { glVertex4f(x,y,z,w); }
 template <> inline void Vertex4 (double x, double y, double z, double w){ glVertex4d(x,y,z,w); }
 
-template <typename T> inline void Vertex4v (const T *v);
-template <> inline void Vertex4v (const float *v) { glVertex4fv(v); }
-template <> inline void Vertex4v (const double *v){ glVertex4dv(v); }
+template <typename T> inline void Vertex4 (const T *v);
+template <> inline void Vertex4 (const float *v) { glVertex4fv(v); }
+template <> inline void Vertex4 (const double *v){ glVertex4dv(v); }
 
 } // end namespace gl
 
