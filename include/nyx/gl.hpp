@@ -23,6 +23,12 @@
 
 #include <GL/glew.h>
 
+#ifdef NYX_USE_EIGEN
+#include <Eigen/Core>
+#endif
+
+#include <nyx/util.hpp>
+
 
 namespace nyx
 {
@@ -63,6 +69,10 @@ template <typename T> inline void ClearColor (T red, T green, T blue, T alpha){ 
                                                                                               static_cast<GLclampf>(green),
                                                                                               static_cast<GLclampf>(blue),
                                                                                               static_cast<GLclampf>(alpha) ); }
+#ifdef NYX_USE_EIGEN
+template <typename T> inline void ClearColor ( const Eigen::Matrix<T,3,1>& col ){ ClearColor( col(0), col(1), col(2), nyx::util::type<T>::one() ); }
+template <typename T> inline void ClearColor ( const Eigen::Matrix<T,4,1>& col ){ ClearColor( col(0), col(1), col(2), col(3) ); }
+#endif
 
 
 template <typename T> inline void LoadMatrix (const T *m);
@@ -71,8 +81,8 @@ template <> inline void LoadMatrix (const double *m){ glLoadMatrixd(m); }
 
 
 template <typename T> inline void MultMatrix (const T *m);
-template <float> inline void MultMatrix (const float *m) { glMultMatrixf(m); }
-template <float> inline void MultMatrix (const double *m){ glMultMatrixd(m); }
+template <> inline void MultMatrix (const float *m) { glMultMatrixf(m); }
+template <> inline void MultMatrix (const double *m){ glMultMatrixd(m); }
 
 //template <typename T> inline void glNormal3b (GLbyte nx, GLbyte ny, GLbyte nz);
 //template <typename T> inline void glNormal3bv (const GLbyte *v);
@@ -113,7 +123,7 @@ template <> inline void Vertex2v (const double *v){ glVertex2dv(v); }
 
 template <typename T> inline void Vertex3 (T x, T y, T z);
 template <> inline void Vertex3 (float x, float y, float z)  { glVertex3f(x,y,z); }
-template <> inline void Vertex3 (double x, double y, float z){ glVertex3d(x,y,z); }
+template <> inline void Vertex3 (double x, double y, double z){ glVertex3d(x,y,z); }
 
 template <typename T> inline void Vertex3v (const T *v);
 template <> inline void Vertex3v (const float *v) { glVertex3fv(v); }
@@ -122,7 +132,7 @@ template <> inline void Vertex3v (const double *v){ glVertex3dv(v); }
 
 template <typename T> inline void Vertex4 (T x, T y, T z, T w);
 template <> inline void Vertex4 (float x, float y, float z, float w)  { glVertex4f(x,y,z,w); }
-template <> inline void Vertex4 (double x, double y, float z, float w){ glVertex4d(x,y,z,w); }
+template <> inline void Vertex4 (double x, double y, double z, double w){ glVertex4d(x,y,z,w); }
 
 template <typename T> inline void Vertex4v (const T *v);
 template <> inline void Vertex4v (const float *v) { glVertex4fv(v); }

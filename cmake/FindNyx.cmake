@@ -54,8 +54,4 @@ set( Nyx_INCLUDE_DIRS
     ${Nyx_INCLUDE_DIR}
     ${Nyx_INCLUDE_DIR}/nyx )
     
-    
-#####
-## Dependencies
-###
 
