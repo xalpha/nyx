@@ -54,4 +54,12 @@ set( Nyx_INCLUDE_DIRS
     ${Nyx_INCLUDE_DIR}
     ${Nyx_INCLUDE_DIR}/nyx )
     
+    
+#####
+## OpenGL
+###
+
+find_package( OpenGL REQUIRED )
+list( APPEND Nyx_INCLUDE_DIRS ${${OPENGL_INCLUDE_DIR}} )
+list( APPEND Nyx_LIBRARIES ${OPENGL_LIBRARIES} )
 
