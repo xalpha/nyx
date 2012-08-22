@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <GL/glew.h>
+#include <GL/gl.h>
 
 #include <nyx/texture.hpp>
 #include <nyx/exception.hpp>

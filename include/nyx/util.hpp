@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <limits>
-#include <GL/glew.h>
+#include <GL/gl.h>
 
 #include <nyx/exception.hpp>
 

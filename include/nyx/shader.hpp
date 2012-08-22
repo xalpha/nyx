@@ -25,9 +25,7 @@
 #include <string>
 #include <stdexcept>
 
-#include <GL/glew.h>
-
-#include <GL/glew.h>
+#include <GL/gl.h>
 
 
 namespace nyx
