@@ -56,10 +56,10 @@ set( Nyx_INCLUDE_DIRS
     
     
 #####
-## OpenGL
+## GLEW
 ###
 
-find_package( OpenGL REQUIRED )
-list( APPEND Nyx_INCLUDE_DIRS ${${OPENGL_INCLUDE_DIR}} )
-list( APPEND Nyx_LIBRARIES ${OPENGL_LIBRARIES} )
+find_package( GLEW REQUIRED )
+list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
+list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
 
