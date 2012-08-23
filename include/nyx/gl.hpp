@@ -21,8 +21,6 @@
 
 #pragma once
 
-#include <GL/gl.h>
-
 #ifdef NYX_USE_EIGEN
 #include <Eigen/Core>
 #endif

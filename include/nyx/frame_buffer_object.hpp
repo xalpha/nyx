@@ -21,10 +21,9 @@
 
 #pragma once
 
-#include <GL/gl.h>
-
-#include <nyx/texture.hpp>
 #include <nyx/exception.hpp>
+#include <nyx/texture.hpp>
+
 
 namespace nyx
 {

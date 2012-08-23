@@ -23,7 +23,9 @@
 
 #include <vector>
 #include <limits>
+
 #include <GL/gl.h>
+#include <GL/glext.h>
 
 #include <nyx/exception.hpp>
 

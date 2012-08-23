@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <GL/gl.h>
 #include <iostream>
 
 #include <nyx/util.hpp>
