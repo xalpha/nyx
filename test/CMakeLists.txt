@@ -19,18 +19,33 @@
 #                                                                            #
 ##############################################################################
 
-# set include directories
-include_directories( ${Nyx_INCLUDE_DIRS} )
+# find glut
+find_package( GLUT QUIET )
 
-# add test for buffer
-set( Nyx_Test_buffer test_assert )
-add_executable( ${Nyx_Test_buffer} test_assert.cpp )
-target_link_libraries( ${Nyx_Test_buffer} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} )
-add_test( ${Nyx_Test_buffer} ${Nyx_Test_buffer} )
+# if GLUT found
+if( GLUT_FOUND )
 
-# add test for buffer
-set( Nyx_Test_buffer test_buffer )
-add_executable( ${Nyx_Test_buffer} test_buffer.cpp )
-target_link_libraries( ${Nyx_Test_buffer} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} )
-add_test( ${Nyx_Test_buffer} ${Nyx_Test_buffer} )
+    # set include directories
+    include_directories( ${Nyx_INCLUDE_DIRS} )
 
+    # add test for assert
+    set( Nyx_Test_assert test_assert )
+    add_executable( ${Nyx_Test_assert} test_assert.cpp )
+    target_link_libraries( ${Nyx_Test_assert} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( ${Nyx_Test_assert} ${Nyx_Test_assert} )
+
+#    # add test for context
+#    set( Nyx_Test_context test_context )
+#    add_executable( ${Nyx_Test_context} test_context.cpp )
+#    target_link_libraries( ${Nyx_Test_context} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+#    add_test( ${Nyx_Test_context} ${Nyx_Test_context} )
+
+    # add test for buffer
+    set( Nyx_Test_buffer test_buffer )
+    add_executable( ${Nyx_Test_buffer} test_buffer.cpp )
+    target_link_libraries( ${Nyx_Test_buffer} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( ${Nyx_Test_buffer} ${Nyx_Test_buffer} )
+
+elseif()
+    message( WARNING "GLUT not found, tests disabled." )
+endif()
