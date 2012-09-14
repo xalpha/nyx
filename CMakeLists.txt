@@ -40,6 +40,7 @@ include( NyxConfig.cmake )
 list( APPEND Nyx_INC
     include/nyx/array_buffer.hpp
     include/nyx/buffer.hpp
+    include/nyx/context.hpp
     include/nyx/color_array_buffer.hpp
     include/nyx/element_buffer.hpp
     include/nyx/exception.hpp
