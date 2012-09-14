@@ -4,18 +4,18 @@
 #                                                                            #
 # Copyright (C) 2012 Alexandru Duliu                                         #
 #                                                                            #
-# nxy is free software; you can redistribute it and/or                       #
+# nyx is free software; you can redistribute it and/or                       #
 # modify it under the terms of the GNU Lesser General Public                 #
 # License as published by the Free Software Foundation; either               #
 # version 3 of the License, or (at your option) any later version.           #
 #                                                                            #
-# nxy is distributed in the hope that it will be useful, but WITHOUT ANY     #
+# nyx is distributed in the hope that it will be useful, but WITHOUT ANY     #
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  #
 # FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the #
 # GNU General Public License for more details.                               #
 #                                                                            #
 # You should have received a copy of the GNU Lesser General Public           #
-# License along with nxy. If not, see <http://www.gnu.org/licenses/>.        #
+# License along with nyx. If not, see <http://www.gnu.org/licenses/>.        #
 #                                                                            #
 ##############################################################################
 
@@ -24,8 +24,7 @@
 #
 # Nyx_INCLUDE_DIR - include directory for nyx headers
 # Nyx_INCLUDE_DIRS - all include directories nyx needs
-# Nyx_Nyx_LINK_LIBRARIES - all include directories nyx needs
-# Nyx_LINK_LIBRARIES - all the libraries nyx needs
+# Nyx_LINK_LIBRARIES - all include directories nyx needs
 
 # set path
 set( Nyx_DIR ${CMAKE_CURRENT_LIST_DIR})
@@ -35,7 +34,7 @@ set( ENV{Nyx_DIR} ${Nyx_DIR} )
 list( APPEND CMAKE_MODULE_PATH ${Nyx_DIR}/cmake ${CMAKE_INSTALL_PREFIX}/share )
 
 # find GLEW
-find_package( GLEW )
+find_package( GLEW REQUIRED )
 
 # set the include dir
 set( Nyx_INCLUDE_DIR "${Nyx_DIR}/include")

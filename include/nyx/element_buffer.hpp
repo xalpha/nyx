@@ -27,7 +27,7 @@ namespace nyx
 {
 
 /*
- * element_buffer.h
+ * element_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

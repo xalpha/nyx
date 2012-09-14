@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <GL/glew.h>
 #include <iostream>
 
 #include <nyx/util.hpp>
@@ -30,7 +29,7 @@ namespace nyx
 {
 
 /*
- * texture.h
+ * texture.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

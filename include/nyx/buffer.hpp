@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <GL/glew.h>
 #include <nyx/exception.hpp>
 #include <nyx/util.hpp>
 
@@ -30,7 +29,7 @@ namespace nyx
 {
 
 /*
- * buffer.h
+ * buffer.hpp
  *
  *  Created on: May 22, 2010
  *      Author: alex
@@ -117,7 +116,7 @@ inline buffer<T>::~buffer()
 {
     if( m_valid )
     {
-        glDeleteBuffersARB( 1, &m_identifier);
+        glDeleteBuffers( 1, &m_identifier);
     }
 }
 
@@ -141,12 +140,12 @@ inline void buffer<T>::init( const T *buf, unsigned int count )
         // delete old content if present
         if( m_valid )
         {
-            glDeleteBuffersARB( 1, &m_identifier);
+            glDeleteBuffers( 1, &m_identifier);
             m_valid = false;
         }
 
         // generate new buffer
-        glGenBuffersARB( 1, &m_identifier);
+        glGenBuffers( 1, &m_identifier);
 
         // update contents
         update();
@@ -160,9 +159,9 @@ inline void buffer<T>::update( const T *buf, unsigned int count, unsigned int of
     if( m_valid )
     {
         m_buffer = buf;
-        glBindBufferARB( m_target, m_identifier);
-        glBufferSubDataARB( m_target, offset, count*sizeof(T)*m_size, m_buffer);
-        glBindBufferARB( m_target, 0);
+        glBindBuffer( m_target, m_identifier);
+        glBufferSubData( m_target, offset, count*sizeof(T)*m_size, m_buffer);
+        glBindBuffer( m_target, 0);
     }
 }
 
@@ -180,9 +179,9 @@ inline void buffer<T>::update()
 {
     if( m_identifier != 0 )
     {
-        glBindBufferARB( m_target, m_identifier);
-        glBufferDataARB( m_target, m_count*sizeof(T)*m_size, m_buffer, m_usage);
-        glBindBufferARB( m_target, 0);
+        glBindBuffer( m_target, m_identifier);
+        glBufferData( m_target, m_count*sizeof(T)*m_size, m_buffer, m_usage);
+        glBindBuffer( m_target, 0);
         m_valid = true;
     }
 }
@@ -192,7 +191,7 @@ template <typename T>
 inline void buffer<T>::bind()
 {
     glEnableClientState( m_state );
-    glBindBufferARB( m_target, m_identifier);
+    glBindBuffer( m_target, m_identifier);
 }
 
 
@@ -200,7 +199,7 @@ template <typename T>
 inline void buffer<T>::unbind()
 {
     glEnableClientState( m_state );
-    glBindBufferARB( m_target, 0);
+    glBindBuffer( m_target, 0);
     glDisableClientState( m_state );
 }
 

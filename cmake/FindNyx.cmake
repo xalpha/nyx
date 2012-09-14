@@ -1,21 +1,21 @@
 ##############################################################################
 #                                                                            #
-# This file is part of nyx, a lightweight C++ template library for OpenGL    #
+# This file is part of nyx, a lightweight C++ template visualization library #
 #                                                                            #
 # Copyright (C) 2012 Alexandru Duliu                                         #
 #                                                                            #
-# nxy is free software; you can redistribute it and/or                       #
+# nyx is free software; you can redistribute it and/or                       #
 # modify it under the terms of the GNU Lesser General Public                 #
 # License as published by the Free Software Foundation; either               #
 # version 3 of the License, or (at your option) any later version.           #
 #                                                                            #
-# nxy is distributed in the hope that it will be useful, but WITHOUT ANY     #
+# nyx is distributed in the hope that it will be useful, but WITHOUT ANY     #
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  #
 # FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License or the #
 # GNU General Public License for more details.                               #
 #                                                                            #
 # You should have received a copy of the GNU Lesser General Public           #
-# License along with nxy. If not, see <http://www.gnu.org/licenses/>.        #
+# License along with nyx. If not, see <http://www.gnu.org/licenses/>.        #
 #                                                                            #
 ##############################################################################
 
@@ -29,20 +29,20 @@
 # try to find the include dir
 find_path( Nyx_INCLUDE_DIR 
     NAMES
-        nyx/CameraCalibration.hpp
-        nyx/Finder.hpp
+        nyx/buffer.hpp
+        nyx/texturehpp
     PATHS
 	    $ENV{Nyx_DIR}/include
 	    %{CMAKE_INSTALL_PREFIX}/include
         /usr/include
         /usr/local/include
         /opt/include
-        /opt/local/install
+        /opt/local/include
     PATH_SUFFIXES
         nyx )
 
 # check if this is a valid component
-if( TARGET ${Nyx_INCLUDE_DIR} )
+if( Nyx_INCLUDE_DIR )
     # include the component
     MESSAGE( STATUS "Nyx found.")
 else()
@@ -56,13 +56,10 @@ set( Nyx_INCLUDE_DIRS
     
     
 #####
-## Dependencies
+## GLEW
 ###
 
-# find GLEW
-if( NOT GLEW_FOUND )
-    find_package( GLEW REQUIRED )
-endif()
+find_package( GLEW REQUIRED )
 list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
 list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
 

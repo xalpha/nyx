@@ -21,16 +21,15 @@
 
 #pragma once
 
-#include <GL/glew.h>
-
-#include <nyx/texture.hpp>
 #include <nyx/exception.hpp>
+#include <nyx/texture.hpp>
+
 
 namespace nyx
 {
 
 /*
- * frame_buffer_objects.h
+ * frame_buffer_objects.hpp
  *
  *  Created on: June 28, 2010
  *      Author: alex

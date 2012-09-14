@@ -25,16 +25,14 @@
 #include <string>
 #include <stdexcept>
 
-#include <GL/glew.h>
-
-#include <GL/glew.h>
+#include <nyx/util.hpp>
 
 
 namespace nyx
 {
 
 /*
- * shader.h
+ * shader.hpp
  *
  *  Created on: May 22, 2010
  *      Author: alex

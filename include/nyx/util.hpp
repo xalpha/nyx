@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <limits>
+
 #include <GL/glew.h>
 
 #include <nyx/exception.hpp>
@@ -32,7 +33,7 @@ namespace nyx
 {
 
 /*
- * util.h
+ * util.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex

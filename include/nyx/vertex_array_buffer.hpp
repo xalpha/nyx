@@ -27,7 +27,7 @@ namespace nyx
 {
 
 /*
- * vertex_array_buffer
+ * vertex_array_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex
