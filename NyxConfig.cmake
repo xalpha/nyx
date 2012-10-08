@@ -31,7 +31,10 @@ set( Nyx_DIR ${CMAKE_CURRENT_LIST_DIR})
 set( ENV{Nyx_DIR} ${Nyx_DIR} )
 
 # add module paths
-list( APPEND CMAKE_MODULE_PATH ${Nyx_DIR}/cmake ${CMAKE_INSTALL_PREFIX}/share )
+list( APPEND CMAKE_MODULE_PATH
+    ${Nyx_DIR}/cmake
+    ${Nyx_INSTALL_PREFIX}/share
+    ${CMAKE_INSTALL_PREFIX}/share )
 
 # find GLEW
 find_package( GLEW REQUIRED )

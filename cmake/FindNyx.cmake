@@ -32,8 +32,9 @@ find_path( Nyx_INCLUDE_DIR
         nyx/buffer.hpp
         nyx/texturehpp
     PATHS
-	    $ENV{Nyx_DIR}/include
-	    %{CMAKE_INSTALL_PREFIX}/include
+  	    $ENV{Nyx_DIR}/include
+        $ENV{HOME}/.local/include
+	    ${CMAKE_INSTALL_PREFIX}/include
         /usr/include
         /usr/local/include
         /opt/include
