@@ -33,7 +33,6 @@ set( ENV{Nyx_DIR} ${Nyx_DIR} )
 # add module paths
 list( APPEND CMAKE_MODULE_PATH
     ${Nyx_DIR}/cmake
-    ${Nyx_INSTALL_PREFIX}/share
     ${CMAKE_INSTALL_PREFIX}/share )
 
 # find GLEW
@@ -56,7 +55,7 @@ endif()
 # set include directories
 set( Nyx_INCLUDE_DIRS
     ${Nyx_INCLUDE_DIR}
-    ${Nyx_INCLUDE_DIRS}
+    ${CMAKE_INSTALL_PREFIX}/include
     ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
 
 # link libraries
