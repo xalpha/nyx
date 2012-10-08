@@ -19,56 +19,33 @@
 #                                                                            #
 ##############################################################################
 
-cmake_minimum_required(VERSION 2.8)
-project(Nyx)
+# find glut
+find_package( GLUT QUIET )
 
-# guard against in-source builds
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-  message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
+# if GLUT found
+if( GLUT_FOUND )
+
+    # set include directories
+    include_directories( ${Nyx_INCLUDE_DIRS} )
+
+    # add test for assert
+    set( Nyx_Test_assert test_assert )
+    add_executable( ${Nyx_Test_assert} test_assert.cpp )
+    target_link_libraries( ${Nyx_Test_assert} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( ${Nyx_Test_assert} ${Nyx_Test_assert} )
+
+#    # add test for context
+#    set( Nyx_Test_context test_context )
+#    add_executable( ${Nyx_Test_context} test_context.cpp )
+#    target_link_libraries( ${Nyx_Test_context} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+#    add_test( ${Nyx_Test_context} ${Nyx_Test_context} )
+
+    # add test for buffer
+    set( Nyx_Test_buffer test_buffer )
+    add_executable( ${Nyx_Test_buffer} test_buffer.cpp )
+    target_link_libraries( ${Nyx_Test_buffer} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( ${Nyx_Test_buffer} ${Nyx_Test_buffer} )
+
+elseif()
+    message( WARNING "GLUT not found, tests disabled." )
 endif()
-
-# set some variabiles
-set( CMAKE_BUILD_TYPE Debug )
-if( NOT WIN32 )
-    set( BUILD_SHARED_LIBS TRUE )
-endif()
-
-# configure the project
-include( NyxConfig.cmake )
-
-# add the include files
-list( APPEND Nyx_INC
-    include/nyx/array_buffer.hpp
-    include/nyx/buffer.hpp
-    include/nyx/color_array_buffer.hpp
-    include/nyx/element_buffer.hpp
-    include/nyx/exception.hpp
-    include/nyx/frame_buffer_object.hpp
-    include/nyx/gl.hpp
-    include/nyx/normal_array_buffer.hpp
-    include/nyx/program.hpp
-    include/nyx/shader.hpp
-    include/nyx/test.hpp
-    include/nyx/texcoord_array_buffer.hpp
-    include/nyx/texture.hpp
-    include/nyx/util.hpp
-    include/nyx/vertex_array_buffer.hpp
-    include/nyx/vertex_buffer_object.hpp )
-
-# set include directories
-include_directories( ${Nyx_INCLUDE_DIRS} )
-
-# add the target
-add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
-
-# install
-install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
-
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGLEW.cmake" DESTINATION share )
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
-
-# enable testing
-ENABLE_TESTING()
-
-# add tests
-add_subdirectory(test)
