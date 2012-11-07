@@ -24,6 +24,7 @@
 #include <vector>
 #include <limits>
 
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 #include <nyx/exception.hpp>
