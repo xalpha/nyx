@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,43 +21,62 @@
 
 #pragma once
 
-#include <iostream>
-#include <sstream>
-
-#include <nyx/buffer.hpp>
-#include <nyx/exception.hpp>
-
+#include <nyx/buffer/array_buffer.hpp>
 
 namespace nyx
 {
 
 /*
- * test.hpp
+ * texcoord_array_buffer.hpp
  *
- *  Created on: May 4, 2012
+ *  Created on: May 4, 2010
  *      Author: alex
+ *
  */
 
 
 template <typename T>
-inline std::string to_string( T val )
+class texcoord_array_buffer : public array_buffer<T>
 {
-    std::stringstream ss;
-    ss << val;
-    return ss.str();
+public:
+    texcoord_array_buffer();
+
+    virtual void set_components( unsigned int components );
+
+    virtual void bind();
+};
+
+
+template <typename T>
+inline texcoord_array_buffer<T>::texcoord_array_buffer() : array_buffer<T>::array_buffer()
+{
+    texcoord_array_buffer<T>::m_state = GL_TEXTURE_COORD_ARRAY;
+
+    // check if the type is compatible
+    if( !util::type<T>::is_signed() || util::type<T>::GL()==GL_BYTE )
+        throw nyx::illegal_template_parameter("nyx::texcoord_array_buffer::texcoord_array_buffer: texCoods buffer does not support unsigned data types, as well as GL_BYTE.");
 }
 
-#ifdef __GNUC__
-#define nyx_assert( expression ) if((expression)) ; else throw std::runtime_error( std::string("Assertion Failed: \"") + \
-                                                                                   std::string( #expression ) + "\" in \"" + \
-                                                                                   std::string( __func__ ) + "\" (\"" + \
-                                                                                   std::string( __FILE__ ) + "\" on line " + \
-                                                                                   nyx::to_string( __LINE__ ) + ").");
-#else
-#define nyx_assert( expression ) if((expression)) ; else throw std::runtime_error( std::string("Assertion Failed: \"") + \
-                                                                                   std::string( #expression ) + "\" " + \
-                                                                                   std::string( __FILE__ ) + " line " + \
-                                                                                   std::string( "__LINE__" ) + ".");
-#endif
+template <typename T>
+inline void texcoord_array_buffer<T>::set_components( unsigned int components )
+{
+    // check if the componets - here size are compatible with the buffer
+    if( components <1 || components >4  )
+        throw invalid_parameter("nyx::texcoord_array_buffer::setComponents: unsupported color buffer size.");
+    else
+        texcoord_array_buffer<T>::m_size = components;
+}
+
+
+template <typename T>
+inline void texcoord_array_buffer<T>::bind()
+{
+    buffer<T>::bind();
+    glTexCoordPointer( texcoord_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );
+}
+
 
 } // end namespace nyx
+
+
+

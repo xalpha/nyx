@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,13 +21,13 @@
 
 #pragma once
 
-#include <nyx/array_buffer.hpp>
+#include <nyx/buffer/array_buffer.hpp>
 
 namespace nyx
 {
 
 /*
- * texcoord_array_buffer.hpp
+ * vertex_array_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex
@@ -36,10 +36,10 @@ namespace nyx
 
 
 template <typename T>
-class texcoord_array_buffer : public array_buffer<T>
+class vertex_array_buffer : public array_buffer<T>
 {
 public:
-    texcoord_array_buffer();
+    vertex_array_buffer();
 
     virtual void set_components( unsigned int components );
 
@@ -48,31 +48,31 @@ public:
 
 
 template <typename T>
-inline texcoord_array_buffer<T>::texcoord_array_buffer() : array_buffer<T>::array_buffer()
+inline vertex_array_buffer<T>::vertex_array_buffer() : array_buffer<T>::array_buffer()
 {
-    texcoord_array_buffer<T>::m_state = GL_TEXTURE_COORD_ARRAY;
+    vertex_array_buffer<T>::m_state = GL_VERTEX_ARRAY;
 
     // check if the type is compatible
-    if( !util::type<T>::is_signed() || util::type<T>::GL()==GL_BYTE )
-        throw nyx::illegal_template_parameter("nyx::texcoord_array_buffer::texcoord_array_buffer: texCoods buffer does not support unsigned data types, as well as GL_BYTE.");
+    if( !util::type<T>::is_signed() )
+        throw nyx::illegal_template_parameter("nyx::vertex_array_buffer::vertex_array_buffer: vertex buffer does not support unsigned data types.");
 }
 
 template <typename T>
-inline void texcoord_array_buffer<T>::set_components( unsigned int components )
+inline void vertex_array_buffer<T>::set_components( unsigned int components )
 {
     // check if the componets - here size are compatible with the buffer
-    if( components <1 || components >4  )
-        throw invalid_parameter("nyx::texcoord_array_buffer::setComponents: unsupported color buffer size.");
+    if( components <2 || components >4 )
+        throw invalid_parameter("nyx::vertex_array_buffer::setComponents: unsupported vertex buffer size.");
     else
-        texcoord_array_buffer<T>::m_size = components;
+        vertex_array_buffer<T>::m_size = components;
 }
 
 
 template <typename T>
-inline void texcoord_array_buffer<T>::bind()
+inline void vertex_array_buffer<T>::bind()
 {
     buffer<T>::bind();
-    glTexCoordPointer( texcoord_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );
+    glVertexPointer( vertex_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );
 }
 
 

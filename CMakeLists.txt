@@ -28,7 +28,6 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 endif()
 
 # set some variabiles
-set( CMAKE_BUILD_TYPE Debug )
 if( NOT WIN32 )
     set( BUILD_SHARED_LIBS TRUE )
 endif()
@@ -38,22 +37,28 @@ include( NyxConfig.cmake )
 
 # add the include files
 list( APPEND Nyx_INC
-    include/nyx/array_buffer.hpp
     include/nyx/buffer.hpp
-    include/nyx/color_array_buffer.hpp
-    include/nyx/element_buffer.hpp
-    include/nyx/exception.hpp
-    include/nyx/frame_buffer_object.hpp
     include/nyx/gl.hpp
-    include/nyx/normal_array_buffer.hpp
     include/nyx/program.hpp
     include/nyx/shader.hpp
-    include/nyx/test.hpp
-    include/nyx/texcoord_array_buffer.hpp
     include/nyx/texture.hpp
     include/nyx/util.hpp
-    include/nyx/vertex_array_buffer.hpp
-    include/nyx/vertex_buffer_object.hpp )
+
+    include/nyx/buffer/array_buffer.hpp
+    include/nyx/buffer/color_array_buffer.hpp
+    include/nyx/buffer/element_buffer.hpp
+    include/nyx/buffer/normal_array_buffer.hpp
+    include/nyx/buffer/texcoord_array_buffer.hpp
+    include/nyx/buffer/vertex_array_buffer.hpp
+
+    include/nyx/object/frame_buffer_object.hpp
+    include/nyx/object/vertex_buffer_object.hpp
+
+    include/nyx/util/exception.hpp
+    include/nyx/util/test.hpp
+
+    include/nyx/vis/plot.hpp
+    include/nyx/vis/widget.hpp )
 
 # set include directories
 include_directories( ${Nyx_INCLUDE_DIRS} )
@@ -71,4 +76,4 @@ install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGLEW.cmake" DESTINATION share
 ENABLE_TESTING()
 
 # add tests
-add_subdirectory(test)
+#add_subdirectory(test)

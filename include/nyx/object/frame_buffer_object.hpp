@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <nyx/exception.hpp>
+#include <nyx/util/exception.hpp>
 #include <nyx/texture.hpp>
 
 

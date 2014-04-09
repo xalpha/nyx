@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -27,7 +27,7 @@ namespace nyx
 {
 
 /*
- * array_buffer.hpp
+ * element_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex
@@ -36,18 +36,54 @@ namespace nyx
 
 
 template <typename T>
-class array_buffer : public buffer<T>
+class element_buffer : public buffer<T>
 {
 public:
-    array_buffer();
+    element_buffer();
 
+    virtual void set_components( unsigned int components );
+
+    unsigned int getPrimitiveType();
+
+protected:
+    unsigned int m_type;  // primitive type
 };
 
 
 template <typename T>
-inline array_buffer<T>::array_buffer() : buffer<T>::buffer()
+inline element_buffer<T>::element_buffer() : buffer<T>::buffer()
 {
-    array_buffer<T>::m_target = GL_ARRAY_BUFFER;
+    element_buffer<T>::m_target = GL_ELEMENT_ARRAY_BUFFER;
+    m_type = 0;
+
+    // check data type
+    if( !util::type<T>::is_integer() )
+        throw nyx::illegal_template_parameter("nyx::element_buffer::element_buffer: data type not supported.");
+}
+
+
+template <typename T>
+inline void element_buffer<T>::set_components( unsigned int components )
+{
+    // check if the componets - here size are compatible with the buffer (here primitive type)
+    switch( components )
+    {
+        case GL_POINTS :    element_buffer<T>::m_size = 1; break;
+        case GL_LINES :     element_buffer<T>::m_size = 2; break;
+        case GL_TRIANGLES : element_buffer<T>::m_size = 3; break;
+        case GL_QUADS :     element_buffer<T>::m_size = 4; break;
+
+        default:
+            throw invalid_parameter("nyx::element_buffer::configure: unsupported element primitive.");
+    }
+    m_type = components;
+}
+
+
+template <typename T>
+inline unsigned int element_buffer<T>::getPrimitiveType()
+{
+    return m_type;
 }
 
 

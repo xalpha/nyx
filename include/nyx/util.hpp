@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -27,7 +27,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <nyx/exception.hpp>
+#include <nyx/util/exception.hpp>
 
 
 namespace nyx

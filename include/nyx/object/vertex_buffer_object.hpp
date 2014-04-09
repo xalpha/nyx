@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,14 +21,14 @@
 
 #pragma once
 
-#include <nyx/exception.hpp>
+#include <nyx/util/exception.hpp>
 #include <nyx/util.hpp>
 
-#include <nyx/vertex_array_buffer.hpp>
-#include <nyx/normal_array_buffer.hpp>
-#include <nyx/color_array_buffer.hpp>
-#include <nyx/texcoord_array_buffer.hpp>
-#include <nyx/element_buffer.hpp>
+#include <nyx/buffer/vertex_array_buffer.hpp>
+#include <nyx/buffer/normal_array_buffer.hpp>
+#include <nyx/buffer/color_array_buffer.hpp>
+#include <nyx/buffer/texcoord_array_buffer.hpp>
+#include <nyx/buffer/element_buffer.hpp>
 
 namespace nyx
 {

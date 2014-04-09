@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,13 +21,13 @@
 
 #pragma once
 
-#include <nyx/array_buffer.hpp>
+#include <nyx/buffer/array_buffer.hpp>
 
 namespace nyx
 {
 
 /*
- * vertex_array_buffer.hpp
+ * normal_array_buffer.hpp
  *
  *  Created on: May 4, 2010
  *      Author: alex
@@ -36,10 +36,10 @@ namespace nyx
 
 
 template <typename T>
-class vertex_array_buffer : public array_buffer<T>
+class normal_array_buffer : public array_buffer<T>
 {
 public:
-    vertex_array_buffer();
+    normal_array_buffer();
 
     virtual void set_components( unsigned int components );
 
@@ -48,31 +48,31 @@ public:
 
 
 template <typename T>
-inline vertex_array_buffer<T>::vertex_array_buffer() : array_buffer<T>::array_buffer()
+inline normal_array_buffer<T>::normal_array_buffer() : array_buffer<T>::array_buffer()
 {
-    vertex_array_buffer<T>::m_state = GL_VERTEX_ARRAY;
+    normal_array_buffer<T>::m_state = GL_NORMAL_ARRAY;
 
     // check if the type is compatible
     if( !util::type<T>::is_signed() )
-        throw nyx::illegal_template_parameter("nyx::vertex_array_buffer::vertex_array_buffer: vertex buffer does not support unsigned data types.");
+        throw nyx::illegal_template_parameter("nyx::normal_array_buffer::normal_array_buffer: normal buffer does not support unsigned data types.");
 }
 
 template <typename T>
-inline void vertex_array_buffer<T>::set_components( unsigned int components )
+inline void normal_array_buffer<T>::set_components( unsigned int components )
 {
     // check if the componets - here size are compatible with the buffer
-    if( components <2 || components >4 )
-        throw invalid_parameter("nyx::vertex_array_buffer::setComponents: unsupported vertex buffer size.");
+    if( components != 3 )
+        throw invalid_parameter("nyx::normal_array_buffer::setComponents: unsupported normal buffer size.");
     else
-        vertex_array_buffer<T>::m_size = components;
+        normal_array_buffer<T>::m_size = components;
 }
 
 
 template <typename T>
-inline void vertex_array_buffer<T>::bind()
+inline void normal_array_buffer<T>::bind()
 {
     buffer<T>::bind();
-    glVertexPointer( vertex_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );
+    glNormalPointer(util::type<T>::GL(), 0, 0 );
 }
 
 

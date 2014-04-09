@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,73 +21,43 @@
 
 #pragma once
 
+#include <iostream>
+#include <sstream>
+
 #include <nyx/buffer.hpp>
+#include <nyx/exception.hpp>
+
 
 namespace nyx
 {
 
 /*
- * element_buffer.hpp
+ * test.hpp
  *
- *  Created on: May 4, 2010
+ *  Created on: May 4, 2012
  *      Author: alex
- *
  */
 
 
 template <typename T>
-class element_buffer : public buffer<T>
+inline std::string to_string( T val )
 {
-public:
-    element_buffer();
-
-    virtual void set_components( unsigned int components );
-
-    unsigned int getPrimitiveType();
-
-protected:
-    unsigned int m_type;  // primitive type
-};
-
-
-template <typename T>
-inline element_buffer<T>::element_buffer() : buffer<T>::buffer()
-{
-    element_buffer<T>::m_target = GL_ELEMENT_ARRAY_BUFFER;
-    m_type = 0;
-
-    // check data type
-    if( !util::type<T>::is_integer() )
-        throw nyx::illegal_template_parameter("nyx::element_buffer::element_buffer: data type not supported.");
+    std::stringstream ss;
+    ss << val;
+    return ss.str();
 }
 
-
-template <typename T>
-inline void element_buffer<T>::set_components( unsigned int components )
-{
-    // check if the componets - here size are compatible with the buffer (here primitive type)
-    switch( components )
-    {
-        case GL_POINTS :    element_buffer<T>::m_size = 1; break;
-        case GL_LINES :     element_buffer<T>::m_size = 2; break;
-        case GL_TRIANGLES : element_buffer<T>::m_size = 3; break;
-        case GL_QUADS :     element_buffer<T>::m_size = 4; break;
-
-        default:
-            throw invalid_parameter("nyx::element_buffer::configure: unsupported element primitive.");
-    }
-    m_type = components;
-}
-
-
-template <typename T>
-inline unsigned int element_buffer<T>::getPrimitiveType()
-{
-    return m_type;
-}
-
+#ifdef __GNUC__
+#define nyx_assert( expression ) if((expression)) ; else throw std::runtime_error( std::string("Assertion Failed: \"") + \
+                                                                                   std::string( #expression ) + "\" in \"" + \
+                                                                                   std::string( __func__ ) + "\" (\"" + \
+                                                                                   std::string( __FILE__ ) + "\" on line " + \
+                                                                                   nyx::to_string( __LINE__ ) + ").");
+#else
+#define nyx_assert( expression ) if((expression)) ; else throw std::runtime_error( std::string("Assertion Failed: \"") + \
+                                                                                   std::string( #expression ) + "\" " + \
+                                                                                   std::string( __FILE__ ) + " line " + \
+                                                                                   std::string( "__LINE__" ) + ".");
+#endif
 
 } // end namespace nyx
-
-
-

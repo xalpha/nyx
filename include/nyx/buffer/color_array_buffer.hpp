@@ -1,4 +1,4 @@
- ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // This file is part of nyx, a lightweight C++ template library for OpenGL    //
 //                                                                            //
@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <nyx/array_buffer.hpp>
+#include <nyx/buffer/array_buffer.hpp>
 
 namespace nyx
 {
