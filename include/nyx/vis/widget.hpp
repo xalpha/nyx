@@ -23,7 +23,6 @@
 
 #include <Eigen/Core>
 
-#define NYX_USE_EIGEN
 #include <nyx/gl.hpp>
 
 /*
