@@ -57,10 +57,10 @@ set( Nyx_INCLUDE_DIRS
     
     
 #####
-## GLEW
+## GL & GLEW
 ###
-
+find_package( OpenGL REQUIRED )
 find_package( GLEW REQUIRED )
-list( APPEND Nyx_INCLUDE_DIRS ${GLEW_INCLUDE_PATH} )
-list( APPEND Nyx_LIBRARIES ${GLEW_LIBRARY} )
+set( Nyx_INCLUDE_DIRS ${Nyx_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
+set( Nyx_LIBRARIES ${Nyx_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
 

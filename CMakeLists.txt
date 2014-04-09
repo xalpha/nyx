@@ -66,8 +66,9 @@ include_directories( ${Nyx_INCLUDE_DIRS} )
 # add the target
 add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
 
-# install
-install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
+# install headers
+install(DIRECTORY include/ DESTINATION include
+          FILES_MATCHING PATTERN "*.hpp")
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
 
