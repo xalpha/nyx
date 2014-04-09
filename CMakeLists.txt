@@ -70,10 +70,9 @@ add_custom_target( ${Nyx_TARGET} SOURCES ${Nyx_INC} )
 install(FILES ${Nyx_INC} DESTINATION "include/nyx" )
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindNyx.cmake" DESTINATION share )
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGLEW.cmake" DESTINATION share )
 
 # enable testing
 ENABLE_TESTING()
 
 # add tests
-#add_subdirectory(test)
+add_subdirectory(test)

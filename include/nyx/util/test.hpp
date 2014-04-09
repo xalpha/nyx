@@ -25,7 +25,7 @@
 #include <sstream>
 
 #include <nyx/buffer.hpp>
-#include <nyx/exception.hpp>
+#include <nyx/util/exception.hpp>
 
 
 namespace nyx

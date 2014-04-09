@@ -21,7 +21,7 @@
 
 #pragma once
 
-#ifdef NYX_USE_EIGEN
+#ifdef EIGEN3_FOUND
 #include <Eigen/Core>
 #endif
 
@@ -67,7 +67,7 @@ template <typename T> inline void ClearColor (T red, T green, T blue, T alpha){ 
                                                                                               static_cast<GLclampf>(green),
                                                                                               static_cast<GLclampf>(blue),
                                                                                               static_cast<GLclampf>(alpha) ); }
-#ifdef NYX_USE_EIGEN
+#ifdef EIGEN3_FOUND
 template <typename T> inline void ClearColor ( const Eigen::Matrix<T,3,1>& col ){ ClearColor( col(0), col(1), col(2), nyx::util::type<T>::one() ); }
 template <typename T> inline void ClearColor ( const Eigen::Matrix<T,4,1>& col ){ ClearColor( col(0), col(1), col(2), col(3) ); }
 #endif

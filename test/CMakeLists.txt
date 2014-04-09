@@ -28,23 +28,26 @@ if( GLUT_FOUND )
     # set include directories
     include_directories( ${Nyx_INCLUDE_DIRS} )
 
-    # add test for assert
-    set( Nyx_Test_assert test_assert )
-    add_executable( ${Nyx_Test_assert} test_assert.cpp )
-    target_link_libraries( ${Nyx_Test_assert} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
-    add_test( ${Nyx_Test_assert} ${Nyx_Test_assert} )
-
-#    # add test for context
+#    # add test for context (the context is dead, long live the context)
 #    set( Nyx_Test_context test_context )
 #    add_executable( ${Nyx_Test_context} test_context.cpp )
 #    target_link_libraries( ${Nyx_Test_context} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
 #    add_test( ${Nyx_Test_context} ${Nyx_Test_context} )
 
     # add test for buffer
-    set( Nyx_Test_buffer test_buffer )
-    add_executable( ${Nyx_Test_buffer} test_buffer.cpp )
-    target_link_libraries( ${Nyx_Test_buffer} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
-    add_test( ${Nyx_Test_buffer} ${Nyx_Test_buffer} )
+    add_executable( test_buffer test_buffer.cpp )
+    target_link_libraries( test_buffer -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( test_buffer test_buffer )
+
+    # add test for plot
+    add_executable( test_plot test_plot.cpp )
+    target_link_libraries( test_plot -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( test_plot test_plot )
+
+    # add test for plot
+    add_executable( test_widget test_widget.cpp )
+    target_link_libraries( test_widget -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
+    add_test( test_widget test_widget )
 
 elseif()
     message( WARNING "GLUT not found, tests disabled." )

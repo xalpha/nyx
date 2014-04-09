@@ -36,7 +36,14 @@ list( APPEND CMAKE_MODULE_PATH
     ${CMAKE_INSTALL_PREFIX}/share )
 
 # find GLEW
+find_package( OpenGL REQUIRED )
 find_package( GLEW REQUIRED )
+
+# find Eigen3
+if( WIN32 )
+    set( EIGEN3_INCLUDE_DIR $ENV{Eigen3_DIR} )
+endif()
+find_package( Eigen3 QUIET )
 
 # set the include dir
 set( Nyx_INCLUDE_DIR "${Nyx_DIR}/include")
@@ -56,19 +63,29 @@ endif()
 set( Nyx_INCLUDE_DIRS
     ${Nyx_INCLUDE_DIR}
     ${CMAKE_INSTALL_PREFIX}/include
+    ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
 
 # link libraries
-set( Nyx_LINK_LIBRARIES ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
+set( Nyx_LINK_LIBRARIES ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
+
+# configure eigen
+if( EIGEN3_FOUND )
+    if( NOT CMAKE_SIZEOF_VOID_P MATCHES "8")
+        set( Nyx_COMPILE_DEFINITIONS ${Nyx_COMPILE_DEFINITIONS} EIGEN_DONT_ALIGN CACHE INTERNAL "all compile definitions nyx needs")
+    endif()
+    set( Nyx_INCLUDE_DIRS ${Nyx_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} CACHE INTERNAL "all includes nyx needs")
+    add_definitions( -DEIGEN3_FOUND )
+endif()
 
 # enable C++11 support
-#if( NOT WIN32 )
-#    if( CMAKE_COMPILER_IS_GNUCXX )
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++0x")
-#    else( CMAKE_COMPILER_IS_GNUCXX )
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Qunused-arguments")
-#    endif()
-#endif()
+if( NOT WIN32 )
+    if( CMAKE_COMPILER_IS_GNUCXX )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++0x")
+    else( CMAKE_COMPILER_IS_GNUCXX )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Qunused-arguments")
+    endif()
+endif()
 
 
 
