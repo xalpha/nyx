@@ -106,7 +106,7 @@ public:
 
     virtual ~plot();
 
-    void draw();
+    virtual void draw();
 
     void setColor( const Vector4& color );
     void setLineWidth( T width );
