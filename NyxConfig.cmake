@@ -35,7 +35,8 @@ list( APPEND CMAKE_MODULE_PATH
     ${Nyx_DIR}/cmake
     ${CMAKE_INSTALL_PREFIX}/share )
 
-# find GLEW
+# find OpenGL
+find_package( OpenGL REQUIRED )
 find_package( GLEW REQUIRED )
 
 # set the include dir
@@ -56,10 +57,13 @@ endif()
 set( Nyx_INCLUDE_DIRS
     ${Nyx_INCLUDE_DIR}
     ${CMAKE_INSTALL_PREFIX}/include
+    ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_PATH} CACHE INTERNAL "all include directories nyx needs" )
 
 # link libraries
-set( Nyx_LINK_LIBRARIES ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
+set( Nyx_LINK_LIBRARIES 
+    ${OPENGL_LIBRARIES}
+    ${GLEW_LIBRARY} CACHE INTERNAL "all libs nyx needs" )
 
 # enable C++11 support
 #if( NOT WIN32 )

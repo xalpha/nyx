@@ -28,12 +28,6 @@ if( GLUT_FOUND )
     # set include directories
     include_directories( ${Nyx_INCLUDE_DIRS} )
 
-    # add test for assert
-    set( Nyx_Test_assert test_assert )
-    add_executable( ${Nyx_Test_assert} test_assert.cpp )
-    target_link_libraries( ${Nyx_Test_assert} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
-    add_test( ${Nyx_Test_assert} ${Nyx_Test_assert} )
-
 #    # add test for context
 #    set( Nyx_Test_context test_context )
 #    add_executable( ${Nyx_Test_context} test_context.cpp )

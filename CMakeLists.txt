@@ -48,7 +48,6 @@ list( APPEND Nyx_INC
     include/nyx/normal_array_buffer.hpp
     include/nyx/program.hpp
     include/nyx/shader.hpp
-    include/nyx/test.hpp
     include/nyx/texcoord_array_buffer.hpp
     include/nyx/texture.hpp
     include/nyx/util.hpp

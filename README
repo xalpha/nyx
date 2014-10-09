@@ -1,0 +1,5 @@
+Dependencies:
+OpenGL & glew
+
+Dependencies test:
+freeglut3-dev libxmu-dev libxi-dev

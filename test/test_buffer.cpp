@@ -19,14 +19,16 @@
 //                                                                            //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <nyx/test.hpp>
-
 /*
  * test_buffer.cpp
  *
  *  Created on: Aug 14, 2012
  *      Author: alex
  */
+
+#include <iostream>
+#include <stdexcept>
+
 
 
 int main()
