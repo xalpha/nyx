@@ -48,9 +48,9 @@ public:
     void attach_depth_texture( unsigned int depthTex, unsigned int width, unsigned int height, bool keepColorBuffer=false );
     void attach_textures( unsigned int colorTex, unsigned int depthTex );
 
-    void attach_color_texture( const nyx::Texture<T> &colorTex );
-    void attach_depth_texture( const nyx::Texture<T> &depthTex );
-    void attach_textures( const nyx::Texture<T> &colorTex, const nyx::Texture<T> &depthTex );
+    void attach_color_texture( const nyx::texture<T> &colorTex );
+    void attach_depth_texture( const nyx::texture<T> &depthTex );
+    void attach_textures( const nyx::texture<T> &colorTex, const nyx::texture<T> &depthTex );
 
     void enable();
     void disable();
@@ -197,21 +197,21 @@ inline void frame_buffer_objects<T>::attach_textures( unsigned int colorTex, uns
 
 
 template<typename T>
-inline void frame_buffer_objects<T>::attach_color_texture( const nyx::Texture<T> &colorTex )
+inline void frame_buffer_objects<T>::attach_color_texture( const nyx::texture<T> &colorTex )
 {
     attach_color_texture( colorTex.getIdentifier(), colorTex.getWidth(), colorTex.getHeight() );
 }
 
 
 template<typename T>
-inline void frame_buffer_objects<T>::attach_depth_texture( const nyx::Texture<T> &depthTex )
+inline void frame_buffer_objects<T>::attach_depth_texture( const nyx::texture<T> &depthTex )
 {
     attach_depth_texture( depthTex.getIdentifier(), depthTex.getWidth(), depthTex.getHeight() );
 }
 
 
 template<typename T>
-inline void frame_buffer_objects<T>::attach_textures( const nyx::Texture<T> &colorTex, const nyx::Texture<T> &depthTex )
+inline void frame_buffer_objects<T>::attach_textures( const nyx::texture<T> &colorTex, const nyx::texture<T> &depthTex )
 {
     attach_textures( colorTex.getIdentifier(), depthTex.getIdentifier() );
 }

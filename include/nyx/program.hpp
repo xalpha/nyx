@@ -36,14 +36,14 @@ namespace nyx
  */
 
 
-template<shader_type V, shader_type F, shader_type G>
-class program
+template<typename Ch>
+class base_shader_program
 {
 public:
-    program();
-    virtual ~program();
+    base_shader_program();
+    virtual ~base_shader_program();
 
-    void load( const std::string &src, shader_type type );
+    void load( const std::basic_string<Ch> &src, shader_type type );
 
     void enable();
     void disable();
@@ -58,36 +58,33 @@ protected:
     unsigned int m_id;
     bool m_loaded;
 
-    shader<V> m_vertexShader;
-    shader<F> m_fragmentShader;
-    shader<G> m_geometryShader;
+    geometry_shader m_vertexShader;
+    fragment_shader m_fragmentShader;
+    geometry_shader m_geometryShader;
 };
 
+typedef base_shader_program<char> shader_program;
 
 
 /////
 // Implementations
 ///
-template<shader_type V, shader_type F, shader_type G>
-inline program<V,F,G>::program()
+template<typename Ch>
+inline base_shader_program<Ch>::base_shader_program()
 {
-    // check if the template parameters were set correctly
-    if( V != vertex || F != fragment || (G != geometry && G != none) )
-        throw std::runtime_error("nyx::program::program: improper template initialization");
-
     m_id = glCreateProgram();
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline program<V,F,G>::~program()
+template<typename Ch>
+inline base_shader_program<Ch>::~base_shader_program()
 {
     glDeleteProgram(m_id);
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::load( const std::string &src, shader_type type )
+template<typename Ch>
+inline void base_shader_program<Ch>::load(const std::basic_string<Ch> &src, shader_type type )
 {
     switch( type )
     {
@@ -101,8 +98,6 @@ inline void program<V,F,G>::load( const std::string &src, shader_type type )
     bool loaded = true;
     loaded = loaded && m_vertexShader.is_loaded();
     loaded = loaded && m_fragmentShader.is_loaded();
-    if( G == geometry )
-    loaded = loaded && m_geometryShader.is_loaded();
 
     // if all here link
     if( loaded )
@@ -113,28 +108,28 @@ inline void program<V,F,G>::load( const std::string &src, shader_type type )
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::enable()
+template<typename Ch>
+inline void base_shader_program<Ch>::enable()
 {
     if(m_loaded)
         glUseProgram(m_id);
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::disable()
+template<typename Ch>
+inline void base_shader_program<Ch>::disable()
 {
     glUseProgram(0);
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::link()
+template<typename Ch>
+inline void base_shader_program<Ch>::link()
 {
     // attach shaders
     glAttachShader(m_id, m_vertexShader.id());
     glAttachShader(m_id, m_fragmentShader.id());
-    if( G == geometry )
+    if( m_geometryShader.is_loaded() )
        glAttachShader(m_id, m_geometryShader.id());
 
     // link everything
@@ -147,8 +142,8 @@ inline void program<V,F,G>::link()
 }
 
 
-template<shader_type V, shader_type F, shader_type G>
-inline void program<V,F,G>::print_program_info()
+template<typename Ch>
+inline void base_shader_program<Ch>::print_program_info()
 {
     int logLength = 0;
     glGetObjectParameterivARB(m_id, GL_OBJECT_INFO_LOG_LENGTH_ARB, &logLength);
@@ -164,10 +159,6 @@ inline void program<V,F,G>::print_program_info()
         delete [] logText;
     }
 }
-
-
-typedef program<vertex, fragment, geometry> ShaderProgram;
-
 
 
 } // end namespace nyx

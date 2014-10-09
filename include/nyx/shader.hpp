@@ -48,11 +48,11 @@ enum shader_type
 
 
 template<shader_type T>
-class shader
+class base_shader
 {
 public:
-    shader();
-    virtual ~shader();
+    base_shader();
+    virtual ~base_shader();
 
     unsigned int id();
 
@@ -66,12 +66,16 @@ protected:
     unsigned int m_id;
 };
 
+typedef base_shader<vertex> vertex_shader;
+typedef base_shader<fragment> fragment_shader;
+typedef base_shader<geometry> geometry_shader;
+
 
 /////
 // Implementation
 ///
 template<shader_type T>
-inline shader<T>::shader()
+inline base_shader<T>::base_shader()
 {
     // create the shader
     m_id = glCreateShader(T);
@@ -79,21 +83,21 @@ inline shader<T>::shader()
 
 
 template<shader_type T>
-inline shader<T>::~shader()
+inline base_shader<T>::~base_shader()
 {
     glDeleteShader(m_id);
 }
 
 
 template<shader_type T>
-inline unsigned int shader<T>::id()
+inline unsigned int base_shader<T>::id()
 {
     return m_id;
 }
 
 
 template<shader_type T>
-inline void shader<T>::load( const std::string &src )
+inline void base_shader<T>::load( const std::string &src )
 {
     if( src.size() > 0 )
     {
@@ -112,7 +116,7 @@ inline void shader<T>::load( const std::string &src )
 
 
 template<shader_type T>
-inline bool shader<T>::is_loaded()
+inline bool base_shader<T>::is_loaded()
 {
     return m_src.size() > 0;
 }
@@ -122,11 +126,11 @@ inline bool shader<T>::is_loaded()
 // shader::None
 ///
 template<>
-class shader<none>
+class base_shader<none>
 {
 public:
-    shader(){}
-    virtual ~shader(){}
+    base_shader(){}
+    virtual ~base_shader(){}
 
     unsigned int id(){ return 0; }
     void load( const std::string &src ){}
