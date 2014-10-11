@@ -44,6 +44,8 @@ public:
     frame_buffer_objects();
     virtual ~frame_buffer_objects();
 
+    void init();
+
     void attach_color_texture( unsigned int colorTex, unsigned int width, unsigned int height, bool keepDepthBuffer=false );
     void attach_depth_texture( unsigned int depthTex, unsigned int width, unsigned int height, bool keepColorBuffer=false );
     void attach_textures( unsigned int colorTex, unsigned int depthTex );
@@ -55,11 +57,14 @@ public:
     void enable();
     void disable();
 
+    void clear();
+
 protected:
     void check();
     void clean_up( bool keepColorBuffer=false, bool keepDepthBuffer=false );
 
 protected:
+    bool m_initialized;
     unsigned int m_id;
 
     // textures
@@ -77,14 +82,13 @@ protected:
 ///
 template<typename T>
 inline frame_buffer_objects<T>::frame_buffer_objects() :
+    m_initialized(0),
     m_id(0),
     m_colorTex(0),
     m_depthTex(0),
     m_colorBuffer(0),
     m_depthBuffer(0)
 {
-    // init FBO
-    glGenFramebuffersEXT( 1, &m_id );
 }
 
 
@@ -97,8 +101,23 @@ inline frame_buffer_objects<T>::~frame_buffer_objects()
 
 
 template<typename T>
+inline void frame_buffer_objects<T>::init()
+{
+    // init FBO
+    if( !m_initialized )
+    {
+        glGenFramebuffersEXT( 1, &m_id );
+        m_initialized = true;
+    }
+}
+
+
+template<typename T>
 inline void frame_buffer_objects<T>::attach_color_texture( unsigned int colorTex, unsigned int width, unsigned int height, bool keepDepthBuffer )
 {
+    // make sure we are initialized
+    init();
+
     if( colorTex != 0 )
     {
         // init stuff
@@ -136,6 +155,9 @@ inline void frame_buffer_objects<T>::attach_color_texture( unsigned int colorTex
 template<typename T>
 inline void frame_buffer_objects<T>::attach_depth_texture( unsigned int depthTex, unsigned int width, unsigned int height, bool keepColorBuffer )
 {
+    // make sure we are initialized
+    init();
+
     if( depthTex != 0 )
     {
         // init stuff
@@ -170,6 +192,9 @@ inline void frame_buffer_objects<T>::attach_depth_texture( unsigned int depthTex
 template<typename T>
 inline void frame_buffer_objects<T>::attach_textures( unsigned int colorTex, unsigned int depthTex )
 {
+    // make sure we are initialized
+    init();
+
     if( colorTex != 0 && depthTex != 0 )
     {
         // Bind the FBO and
@@ -199,27 +224,30 @@ inline void frame_buffer_objects<T>::attach_textures( unsigned int colorTex, uns
 template<typename T>
 inline void frame_buffer_objects<T>::attach_color_texture( const nyx::texture<T> &colorTex )
 {
-    attach_color_texture( colorTex.getIdentifier(), colorTex.getWidth(), colorTex.getHeight() );
+    attach_color_texture( colorTex.id(), colorTex.width(), colorTex.height() );
 }
 
 
 template<typename T>
 inline void frame_buffer_objects<T>::attach_depth_texture( const nyx::texture<T> &depthTex )
 {
-    attach_depth_texture( depthTex.getIdentifier(), depthTex.getWidth(), depthTex.getHeight() );
+    attach_depth_texture( depthTex.id(), depthTex.width(), depthTex.height() );
 }
 
 
 template<typename T>
 inline void frame_buffer_objects<T>::attach_textures( const nyx::texture<T> &colorTex, const nyx::texture<T> &depthTex )
 {
-    attach_textures( colorTex.getIdentifier(), depthTex.getIdentifier() );
+    attach_textures( colorTex.id(), depthTex.id() );
 }
 
 
 template<typename T>
 inline void frame_buffer_objects<T>::enable()
 {
+    // make sure we are initialized
+    init();
+
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_id );
     glDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
     glReadBuffer( GL_COLOR_ATTACHMENT0_EXT );
@@ -229,13 +257,26 @@ inline void frame_buffer_objects<T>::enable()
 template<typename T>
 inline void frame_buffer_objects<T>::disable()
 {
+    // make sure we are initialized
+    init();
+
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
+}
+
+
+template<typename T>
+inline void frame_buffer_objects<T>::clear()
+{
+    clean_up( true, true );
 }
 
 
 template<typename T>
 inline void frame_buffer_objects<T>::clean_up(  bool keepColorBuffer, bool keepDepthBuffer )
 {
+    // make sure we are initialized
+    init();
+
     if( m_colorBuffer != 0 && !keepColorBuffer )
         glDeleteRenderbuffersEXT( 1, &m_colorBuffer );
     if( m_depthBuffer != 0 && !keepDepthBuffer )
@@ -246,6 +287,9 @@ inline void frame_buffer_objects<T>::clean_up(  bool keepColorBuffer, bool keepD
 template<typename T>
 inline void frame_buffer_objects<T>::check()
 {
+    // make sure we are initialized
+    init();
+
     // check if the FBO was setup properly
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_id );
     GLenum fboStatus = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );

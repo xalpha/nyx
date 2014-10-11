@@ -82,6 +82,8 @@ public:
     void update();
 
     void draw();
+    void draw_vertices( unsigned int offset, unsigned int size );
+    void draw_elements( unsigned int offset, unsigned int size );
 
 protected:
     // array buffers GL_VERTEX_ARRAY, GL_NORMAL_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
@@ -137,9 +139,7 @@ template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initNormals( const Ta *normals)
 {
     if( m_vertices.count() > 0 )
-    {
         m_normals.init(normals, m_vertices.count());
-    }
 }
 
 
@@ -147,9 +147,7 @@ template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initColors( const Ta *colors)
 {
     if( m_vertices.count() > 0 )
-    {
         m_colors.init(colors, m_vertices.count());
-    }
 }
 
 
@@ -157,9 +155,7 @@ template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::initTexCoords( const Ta *texCoords)
 {
     if( m_vertices.count() > 0 )
-    {
         m_texCoords.init(texCoords, m_vertices.count());
-    }
 }
 
 
@@ -202,35 +198,65 @@ inline void vertex_buffer_object<Ta, Te>::update()
     updateNormals();
     updateColors();
     updateTexCoords();
-updateElements();
+    updateElements();
 }
 
 
 template <typename Ta, typename Te>
 inline void vertex_buffer_object<Ta, Te>::draw()
 {
-    if( m_vertices.is_valid() )
-        m_vertices.bind();
+    if( m_elements.is_valid() )
+        draw_elements( 0, m_elements.count() );
     else
-        return;
+        draw_vertices( 0, m_vertices.count() );
+}
 
-    if( m_normals.is_valid() )
-        m_normals.bind();
 
-    if( m_colors.is_valid() )
-        m_colors.bind();
+template <typename Ta, typename Te>
+inline void vertex_buffer_object<Ta, Te>::draw_vertices( unsigned int offset, unsigned int size )
+{
+    // vertices
+    if( m_vertices.is_valid() ) m_vertices.bind();
+    else throw std::runtime_error( "vertex_buffer_object::draw_vertices: no vertices." );
 
-    if( m_texCoords.is_valid() )
-        m_texCoords.bind();
+    if( m_normals.is_valid() ) m_normals.bind();     // normals
+    if( m_colors.is_valid() ) m_colors.bind();       // colors
+    if( m_texCoords.is_valid() ) m_texCoords.bind(); // texture coordinates
 
+    // elements
+    if( m_elements.is_valid() ) throw std::runtime_error( "vertex_buffer_object::draw_vertices: elements are aleady defined, use \"draw_elements\" instead." );
+    else glDrawArrays( m_elements.getPrimitiveType(), offset, size);
+
+    // unbind
+    m_vertices.unbind();
+    m_normals.unbind();
+    m_colors.unbind();
+    m_texCoords.unbind();
+    m_elements.unbind();
+}
+
+
+template <typename Ta, typename Te>
+inline void vertex_buffer_object<Ta, Te>::draw_elements( unsigned int offset, unsigned int size )
+{
+    // vertices
+    if( m_vertices.is_valid() ) m_vertices.bind();
+    else throw std::runtime_error( "vertex_buffer_object::draw_elements: no vertices." );
+
+    if( m_normals.is_valid() ) m_normals.bind();     // normals
+    if( m_colors.is_valid() ) m_colors.bind();       // colors
+    if( m_texCoords.is_valid() ) m_texCoords.bind(); // texture coordinates
+
+    // elements
     if( m_elements.is_valid() )
     {
         m_elements.bind();
-        glDrawElements( m_elements.getPrimitiveType(), m_elements.count()*m_elements.size(), util::type<Te>::GL(), 0 );
+        glDrawElements( m_elements.getPrimitiveType(), m_elements.count()*m_elements.size(), util::type<Te>::GL(), 0 ); // TODO: there is still an issue here with the offset
     }
     else
-        glDrawArrays( m_elements.getPrimitiveType(), 0, m_vertices.count());
+        throw std::runtime_error( "vertex_buffer_object::draw_elements: there are no elements." );
 
+    // unbind
     m_vertices.unbind();
     m_normals.unbind();
     m_colors.unbind();
@@ -240,6 +266,3 @@ inline void vertex_buffer_object<Ta, Te>::draw()
 
 
 } // end namespace nyx
-
-
-

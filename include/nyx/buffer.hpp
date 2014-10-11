@@ -95,19 +95,17 @@ protected:
 
 
 template <typename T>
-inline buffer<T>::buffer()
+inline buffer<T>::buffer() :
+    m_buffer(0),
+    m_count(0),
+    m_size(0),
+    m_identifier(0),
+    m_target(0),
+    m_state(0),
+    m_usage(0),
+    m_configured(false),
+    m_valid(false)
 {
-    m_buffer = 0;
-    m_count = 0;
-    m_size = 0;
-
-    m_identifier = 0;
-    m_target = 0;
-    m_state = 0;
-    m_usage = 0;
-
-    m_configured = false;
-    m_valid = false;
 }
 
 
@@ -115,9 +113,7 @@ template <typename T>
 inline buffer<T>::~buffer()
 {
     if( m_valid )
-    {
         glDeleteBuffers( 1, &m_identifier);
-    }
 }
 
 template <typename T>
@@ -275,5 +271,4 @@ inline void buffer<T>::set_state( unsigned int state )
 }
 
 
-
-}
+} // end namespace nyx

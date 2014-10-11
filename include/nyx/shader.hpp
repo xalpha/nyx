@@ -40,7 +40,6 @@ namespace nyx
 
 enum shader_type
 {
-    none,
     vertex=GL_VERTEX_SHADER,
     fragment=GL_FRAGMENT_SHADER,
     geometry=GL_GEOMETRY_SHADER_ARB
@@ -54,6 +53,8 @@ public:
     base_shader();
     virtual ~base_shader();
 
+    void init();
+
     unsigned int id();
 
     void load( const std::string &src );
@@ -62,6 +63,7 @@ public:
 
 protected:
     // program
+    bool m_initialized;
     std::string m_src;
     unsigned int m_id;
 };
@@ -75,10 +77,8 @@ typedef base_shader<geometry> geometry_shader;
 // Implementation
 ///
 template<shader_type T>
-inline base_shader<T>::base_shader()
+inline base_shader<T>::base_shader() : m_initialized(false)
 {
-    // create the shader
-    m_id = glCreateShader(T);
 }
 
 
@@ -86,6 +86,18 @@ template<shader_type T>
 inline base_shader<T>::~base_shader()
 {
     glDeleteShader(m_id);
+}
+
+
+template<shader_type T>
+inline void base_shader<T>::init()
+{
+    if( !m_initialized )
+    {
+        // create the shader
+        m_id = glCreateShader(T);
+        m_initialized = true;
+    }
 }
 
 
@@ -99,6 +111,9 @@ inline unsigned int base_shader<T>::id()
 template<shader_type T>
 inline void base_shader<T>::load( const std::string &src )
 {
+    // make sure we are initialized
+    init();
+
     if( src.size() > 0 )
     {
         m_src = src;
@@ -120,22 +135,6 @@ inline bool base_shader<T>::is_loaded()
 {
     return m_src.size() > 0;
 }
-
-
-/////
-// shader::None
-///
-template<>
-class base_shader<none>
-{
-public:
-    base_shader(){}
-    virtual ~base_shader(){}
-
-    unsigned int id(){ return 0; }
-    void load( const std::string &src ){}
-    bool is_loaded(){ return false; }
-};
 
 
 } // end namespace nyx
