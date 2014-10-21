@@ -43,7 +43,7 @@ public:
 
     virtual void set_components( unsigned int components );
 
-    virtual void bind();
+    virtual void bind() const;
 };
 
 
@@ -54,7 +54,7 @@ inline texcoord_array_buffer<T>::texcoord_array_buffer() : array_buffer<T>::arra
 
     // check if the type is compatible
     if( !util::type<T>::is_signed() || util::type<T>::GL()==GL_BYTE )
-        throw nyx::illegal_template_parameter("nyx::texcoord_array_buffer::texcoord_array_buffer: texCoods buffer does not support unsigned data types, as well as GL_BYTE.");
+        throw std::runtime_error("nyx::texcoord_array_buffer::texcoord_array_buffer: texCoods buffer does not support unsigned data types, as well as GL_BYTE.");
 }
 
 template <typename T>
@@ -62,14 +62,14 @@ inline void texcoord_array_buffer<T>::set_components( unsigned int components )
 {
     // check if the componets - here size are compatible with the buffer
     if( components <1 || components >4  )
-        throw invalid_parameter("nyx::texcoord_array_buffer::setComponents: unsupported color buffer size.");
+        throw std::runtime_error("nyx::texcoord_array_buffer::setComponents: unsupported color buffer size.");
     else
         texcoord_array_buffer<T>::m_size = components;
 }
 
 
 template <typename T>
-inline void texcoord_array_buffer<T>::bind()
+inline void texcoord_array_buffer<T>::bind() const
 {
     buffer<T>::bind();
     glTexCoordPointer( texcoord_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );

@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <nyx/exception.hpp>
+#include <nyx/util.hpp>
 #include <nyx/texture.hpp>
 
 
@@ -309,7 +309,7 @@ inline void frame_buffer_objects<T>::check()
     }
 
     if( errors.size() != 0 )
-        throw nyx::opengl_error(errors.c_str());
+        throw std::runtime_error(errors.c_str());
 }
 
 

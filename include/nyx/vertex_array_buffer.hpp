@@ -43,7 +43,7 @@ public:
 
     virtual void set_components( unsigned int components );
 
-    virtual void bind();
+    virtual void bind() const;
 };
 
 
@@ -54,7 +54,7 @@ inline vertex_array_buffer<T>::vertex_array_buffer() : array_buffer<T>::array_bu
 
     // check if the type is compatible
     if( !util::type<T>::is_signed() )
-        throw nyx::illegal_template_parameter("nyx::vertex_array_buffer::vertex_array_buffer: vertex buffer does not support unsigned data types.");
+        throw std::runtime_error("nyx::vertex_array_buffer::vertex_array_buffer: vertex buffer does not support unsigned data types.");
 }
 
 template <typename T>
@@ -62,14 +62,14 @@ inline void vertex_array_buffer<T>::set_components( unsigned int components )
 {
     // check if the componets - here size are compatible with the buffer
     if( components <2 || components >4 )
-        throw invalid_parameter("nyx::vertex_array_buffer::setComponents: unsupported vertex buffer size.");
+        throw std::runtime_error("nyx::vertex_array_buffer::setComponents: unsupported vertex buffer size.");
     else
         vertex_array_buffer<T>::m_size = components;
 }
 
 
 template <typename T>
-inline void vertex_array_buffer<T>::bind()
+inline void vertex_array_buffer<T>::bind() const
 {
     buffer<T>::bind();
     glVertexPointer( vertex_array_buffer<T>::m_size, util::type<T>::GL(), 0, 0 );

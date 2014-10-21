@@ -43,7 +43,7 @@ public:
 
     virtual void set_components( unsigned int components );
 
-    unsigned int getPrimitiveType();
+    unsigned int get_primitive_type() const;
 
 protected:
     unsigned int m_type;  // primitive type
@@ -58,7 +58,7 @@ inline element_buffer<T>::element_buffer() : buffer<T>::buffer()
 
     // check data type
     if( !util::type<T>::is_integer() )
-        throw nyx::illegal_template_parameter("nyx::element_buffer::element_buffer: data type not supported.");
+        throw std::runtime_error("nyx::element_buffer::element_buffer: data type not supported.");
 }
 
 
@@ -81,7 +81,7 @@ inline void element_buffer<T>::set_components( unsigned int components )
 
 
 template <typename T>
-inline unsigned int element_buffer<T>::getPrimitiveType()
+inline unsigned int element_buffer<T>::get_primitive_type() const
 {
     return m_type;
 }

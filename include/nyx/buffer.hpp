@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <nyx/exception.hpp>
+
 #include <nyx/util.hpp>
 
 
@@ -61,13 +61,13 @@ public:
     void update( const T *buf );
     void update();
 
-    virtual void bind();
-    virtual void unbind();
+    virtual void bind() const;
+    virtual void unbind() const;
 
-    unsigned int id();
-    unsigned int count();
-    unsigned int size();
-    bool is_valid();
+    unsigned int id() const;
+    unsigned int count() const;
+    unsigned int size() const;
+    bool is_valid() const;
 
 protected:
     virtual void set_components( unsigned int components ) = 0;
@@ -184,7 +184,7 @@ inline void buffer<T>::update()
 
 
 template <typename T>
-inline void buffer<T>::bind()
+inline void buffer<T>::bind() const
 {
     glEnableClientState( m_state );
     glBindBuffer( m_target, m_identifier);
@@ -192,7 +192,7 @@ inline void buffer<T>::bind()
 
 
 template <typename T>
-inline void buffer<T>::unbind()
+inline void buffer<T>::unbind() const
 {
     glEnableClientState( m_state );
     glBindBuffer( m_target, 0);
@@ -201,28 +201,28 @@ inline void buffer<T>::unbind()
 
 
 template <typename T>
-inline unsigned int buffer<T>::id()
+inline unsigned int buffer<T>::id() const
 {
     return m_identifier;
 }
 
 
 template <typename T>
-inline unsigned int buffer<T>::count()
+inline unsigned int buffer<T>::count() const
 {
     return m_count;
 }
 
 
 template <typename T>
-inline unsigned int buffer<T>::size()
+inline unsigned int buffer<T>::size() const
 {
     return m_size;
 }
 
 
 template <typename T>
-inline bool buffer<T>::is_valid()
+inline bool buffer<T>::is_valid() const
 {
     return m_valid;
 }
@@ -247,7 +247,7 @@ inline void buffer<T>::set_usage( unsigned int usage )
             break;
 
         default:
-            throw invalid_parameter("nyx::buffer::setUsage: unsupported buffer usage.");
+            throw std::runtime_error("nyx::buffer::setUsage: unsupported buffer usage.");
     }
 }
 

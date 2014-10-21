@@ -21,13 +21,12 @@
 
 #pragma once
 
+#include <stdexcept>
 #include <vector>
 #include <limits>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-
-#include <nyx/exception.hpp>
 
 
 namespace nyx
@@ -197,7 +196,7 @@ inline size_t channels( F format )
 
         // default
         default:
-            throw nyx::invalid_parameter( "nyx::util::format: unknown pixel format." );
+            throw std::runtime_error( "nyx::util::format: unknown pixel format." );
     }
 }
 

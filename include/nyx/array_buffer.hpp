@@ -45,9 +45,10 @@ public:
 
 
 template <typename T>
-inline array_buffer<T>::array_buffer() : buffer<T>::buffer()
+inline array_buffer<T>::array_buffer() :
+    buffer<T>::buffer(),
+    array_buffer<T>::m_target(GL_ARRAY_BUFFER)
 {
-    array_buffer<T>::m_target = GL_ARRAY_BUFFER;
 }
 
 
