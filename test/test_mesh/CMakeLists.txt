@@ -19,39 +19,37 @@
 #                                                                            #
 ##############################################################################
 
-add_subdirectory( "test_widget" )
-add_subdirectory( "test_mesh" )
+cmake_minimum_required(VERSION 2.8)
+project(test_mesh)
 
-## find glut
-#find_package( GLUT QUIET )
+# turn stuff on
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_AUTOMOC ON)
 
-## if GLUT found
-#if( GLUT_FOUND )
+# find Qt5
+find_package( Qt5Widgets REQUIRED )
+find_package( Qt5OpenGL REQUIRED)
 
-#    # set include directories
-#    include_directories( ${Nyx_INCLUDE_DIRS} )
+# set include paths
+include_directories(
+    include
+    ui
+    ${Nyx_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR} )
 
-##    # add test for context (the context is dead, long live the context)
-##    set( Nyx_Test_context test_context )
-##    add_executable( ${Nyx_Test_context} test_context.cpp )
-##    target_link_libraries( ${Nyx_Test_context} -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_LIBRARIES} )
-##    add_test( ${Nyx_Test_context} ${Nyx_Test_context} )
+# set the header files of QObject derived classes
+set( TEST_MESH_QT_HPP test_mesh.hpp )
+set( TEST_MESH_INC test_mesh.hpp )
+set( TEST_MESH_SRC test_mesh.cpp main.cpp )
 
-##    # add test for buffer
-##    add_executable( test_buffer test_buffer.cpp )
-##    target_link_libraries( test_buffer -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_glut_LIBRARY} )
-##    add_test( test_buffer test_buffer )
+# run the qt moc (meta object compiler)
+QT5_WRAP_CPP( TEST_MESH_QT_HPP_MOC ${TEST_MESH_QT_HPP} )
 
-##    # add test for plot
-##    add_executable( test_plot test_plot.cpp )
-##    target_link_libraries( test_plot -lm -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_glut_LIBRARY} )
-##    add_test( test_plot test_plot )
+# add the exec
+add_executable( ${PROJECT_NAME} ${TEST_MESH_SRC} ${TEST_MESH_INC} ${TEST_MESH_QT_HPP_MOC} )
+target_link_libraries( ${PROJECT_NAME} ${Nyx_LINK_LIBRARIES} )
 
-#    # add test for plot
-#    add_executable( test_widget test_widget.cpp )
-#    target_link_libraries( test_widget -lc -Wall ${Nyx_LINK_LIBRARIES} ${GLUT_glut_LIBRARY} )
-#    add_test( test_widget test_widget )
+# this is how to connect modules in qt5
+qt5_use_modules( ${PROJECT_NAME} Widgets OpenGL )
 
-#elseif()
-#    message( WARNING "GLUT not found, tests disabled." )
-#endif()
+#ADD_TEST( testd [Debug|Release] ${PROJECT_NAME} )

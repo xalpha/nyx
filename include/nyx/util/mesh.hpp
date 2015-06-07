@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
+#include <iostream>
 #include <stdint.h>
 #include <string>
 #include <sstream>
@@ -49,6 +50,8 @@ public:
     const std::vector<Tf>& vertices() const { return m_vertices; }
     const std::vector<Tf>& normals() const { return m_normals; }
     const std::vector<Ti>& indices() const { return m_indices; }
+    size_t vertices_per_face() const { return m_vertices_per_face; }
+    size_t face_count() const { return m_indices.size() / m_vertices_per_face; }
 
     // simple operations
     void operator +( Tf val );
@@ -63,6 +66,9 @@ protected:
     // loading
     void load_obj( const std::string& path );
 
+    // simple helpers
+    void replace_substr( std::string& str, const std::string& src, const std::string& dst );
+
 protected:
     // input mesh
     std::vector<Tf> m_vertices;
@@ -70,7 +76,7 @@ protected:
     std::vector<Tf> m_normals;
     size_t m_vertex_count;
     size_t m_index_count;
-    size_t m_face_count;
+    size_t m_vertices_per_face;
 
     // mesh properties
     Tf m_min[Dim];
@@ -151,7 +157,6 @@ template<typename Tf, typename Ti, int Dim>
 inline void mesh<Tf,Ti,Dim>::analyze()
 {
     // init data about the matching surface
-    m_face_count = int(m_indices.size()) / 3;
     m_vertex_count = int( m_vertices.size() / Dim );
     m_index_count = int( m_indices.size() / Dim );
 
@@ -196,9 +201,21 @@ inline void mesh<Tf,Ti,Dim>::load_obj( const std::string& path )
         m_normals.clear();
         Tf vertex[3];
         Tf normal[3];
+        m_vertices_per_face = 0;
 
         while(std::getline(file, buffer))
         {
+            // make sure that all faces have the same number of vertices
+            size_t fvc = std::count( buffer.begin(), buffer.end(), '/' ) / 2;
+            if( m_vertices_per_face == 0 ) m_vertices_per_face = fvc;
+            else if( fvc != m_vertices_per_face ) throw std::runtime_error( "nyx::mesh::load_obj: all face must have the same number of vertices." );
+
+            // simple processing of the buffer to make it easyer to parse the face entries
+            replace_substr( buffer, " /", " 0;" );
+            replace_substr( buffer, "//", "/0/" );
+            replace_substr( buffer, "/ ", "/0 " );
+            std::replace( buffer.begin(), buffer.end(), '/', ' ');
+
             // dump it into a string buffer
             std::stringstream ss(buffer);
             std::string entry_type;
@@ -215,12 +232,38 @@ inline void mesh<Tf,Ti,Dim>::load_obj( const std::string& path )
                 ss >> normal[0] >> normal[1] >> normal[2];
                 m_normals.push_back( normal[0] ); m_normals.push_back( normal[1] ); m_normals.push_back( normal[2] );
             }
+            else if( entry_type.compare("f") == 0 )
+            {
+                // count the number of vertices per face (face vertex count)
+                std::cout << fvc << ": ";
+                std::vector<Ti> vi(fvc),ni(fvc),ti(fvc); // vertex,
+                for( size_t i=0; i<fvc; i++ )
+                    ss >> vi[i] >> ni[i] >> ti[i];
+                if( std::find(vi.begin(), vi.end(), 0) == vi.end() ) m_indices.insert( m_indices.end(), vi.begin(), vi.end() );
+                if( std::find(ni.begin(), ni.end(), 0) == ni.end() ) m_normals.insert( m_normals.end(), ni.begin(), ni.end() );
+            }
         }
+
+        // now decrement all vertex indices, as in the standard, they begin at zero
+        for( Ti& idx : m_indices ) idx--;
     }
     else
         throw std::runtime_error("nyx::mesh::load_obj: could not open \"" + path + "\".");
 }
 
+
+template<typename Tf, typename Ti, int Dim>
+inline void mesh<Tf,Ti,Dim>::replace_substr( std::string& str, const std::string& src, const std::string& dst )
+{
+    if( !str.empty() )
+    {
+        for( size_t i = str.find( src, 0 ); i!=std::string::npos; i = str.find(src,i) )
+        {
+            str.erase( i, src.size() );
+            str.insert( i, dst );
+        }
+    }
+}
 
 
 }// namespace nyx
