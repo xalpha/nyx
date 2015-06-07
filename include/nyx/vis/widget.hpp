@@ -109,7 +109,7 @@ inline widget<T>::widget() :
 {
     m_view_transform(0) = static_cast<T>(0.0); // elevation
     m_view_transform(1) = static_cast<T>(0.0); // azimuth
-    m_view_transform(2) = static_cast<T>(-1.5); // zoom
+    m_view_transform(2) = static_cast<T>(-3.5); // zoom
 
     m_center = Vector3::Zero();
 

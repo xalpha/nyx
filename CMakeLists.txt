@@ -55,6 +55,7 @@ list( APPEND Nyx_INC
     include/nyx/object/vertex_buffer_object.hpp
 
     include/nyx/util/exception.hpp
+    include/nyx/util/mesh.hpp
     include/nyx/util/test.hpp
 
     include/nyx/vis/plot.hpp
