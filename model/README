@@ -1,0 +1,14 @@
+monkey.obj and monkey.obj are subdivided versions of the monkey mesh found in Blender.
+
+Blender is released under the GNU General Public License (GPL, or “free software”).
+
+This license grants people a number of freedoms:
+
+    You are free to use Blender, for any purpose
+    You are free to distribute Blender
+    You can study how Blender works and change it
+    You can distribute changed versions of Blender
+
+The GPL strictly aims at protecting these freedoms, requiring everyone to share their modifications when they also share the software in public. That aspect is commonly referred to as Copyleft.
+
+The Blender Foundation and its projects on blender.org are committed to preserving Blender as free software. 

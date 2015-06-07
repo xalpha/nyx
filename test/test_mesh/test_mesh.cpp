@@ -47,10 +47,14 @@ void test_mesh::draw()
 
     // set the mvp matrix
     nyx::widget<float>::setView();
+    glRotatef(-90,1,0,0);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, m_mesh.vertices().data());
-    glDrawElements(GL_QUADS, m_mesh.indices().size(), GL_UNSIGNED_INT, m_mesh.indices().data());
+    if( m_mesh.indices().size() > 0 )
+        glDrawElements(nyx::util::primitive_type(m_mesh.vertices_per_face()), m_mesh.indices().size(), GL_UNSIGNED_INT, m_mesh.indices().data());
+    else
+        glDrawArrays( nyx::util::primitive_type(m_mesh.vertices_per_face()), 0, m_mesh.vertices().size()/3);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 

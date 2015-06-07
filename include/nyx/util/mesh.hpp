@@ -53,6 +53,7 @@ public:
     size_t vertices_per_face() const { return m_vertices_per_face; }
     size_t face_count() const { return m_indices.size() / m_vertices_per_face; }
 
+
     // simple operations
     void operator +( Tf val );
     void operator +( Tf val[Dim] );
@@ -65,6 +66,7 @@ protected:
 
     // loading
     void load_obj( const std::string& path );
+    void load_stl( const std::string& path );
 
     // simple helpers
     void replace_substr( std::string& str, const std::string& src, const std::string& dst );
@@ -113,6 +115,8 @@ inline void mesh<Tf,Ti,Dim>::load( const std::string& path )
     // load
     if( ext.compare( "obj" ) == 0 )
         load_obj(path);
+    if( ext.compare( "stl" ) == 0 )
+        load_stl(path);
 
     // let's see what we got
     analyze();
@@ -161,7 +165,7 @@ inline void mesh<Tf,Ti,Dim>::analyze()
     m_index_count = int( m_indices.size() / Dim );
 
     // init stuff
-    for(int j=0; j<Dim; j++)
+    for(int j=0; j<Dim && j<m_vertex_count; j++)
         m_min[j] = m_max[j] = m_vertices[j];
 
     // look for min and max
@@ -173,7 +177,7 @@ inline void mesh<Tf,Ti,Dim>::analyze()
         }
 
     // save results
-    for(int j=0; j<Dim; j++)
+    for(int j=0; j<Dim && j<m_vertex_count; j++)
     {
         m_center[j] = (Tf)(0.5)*(m_max[j]+m_min[j]);
         m_size[j] = m_max[j] - m_min[j];
@@ -240,7 +244,7 @@ inline void mesh<Tf,Ti,Dim>::load_obj( const std::string& path )
                 for( size_t i=0; i<fvc; i++ )
                     ss >> vi[i] >> ni[i] >> ti[i];
                 if( std::find(vi.begin(), vi.end(), 0) == vi.end() ) m_indices.insert( m_indices.end(), vi.begin(), vi.end() );
-                if( std::find(ni.begin(), ni.end(), 0) == ni.end() ) m_normals.insert( m_normals.end(), ni.begin(), ni.end() );
+                //if( std::find(ni.begin(), ni.end(), 0) == ni.end() ) m_normals.insert( m_normals.end(), ni.begin(), ni.end() ); // TODO: not yet interesting
             }
         }
 
@@ -249,6 +253,56 @@ inline void mesh<Tf,Ti,Dim>::load_obj( const std::string& path )
     }
     else
         throw std::runtime_error("nyx::mesh::load_obj: could not open \"" + path + "\".");
+}
+
+
+template<typename Tf, typename Ti, int Dim>
+inline void mesh<Tf,Ti,Dim>::load_stl( const std::string& path )
+{
+    // init stuff
+    std::ifstream file ( path.c_str(), std::ios::in | std::ios::binary);
+    const size_t header_buffer_size = 80;
+    char header_buffer[header_buffer_size];
+    uint32_t triangle_count;
+    m_vertices.clear();
+    m_normals.clear();
+    m_indices.clear();
+    m_vertices_per_face = 3;
+
+    // if open continue
+    if( file.is_open() )
+    {
+        // read the header
+        file.read (header_buffer, header_buffer_size);
+        std::cout <<"header: " << header_buffer << std::endl;
+
+        // get the triangle count
+        file.read ( reinterpret_cast<char*>(&triangle_count), sizeof(uint32_t));
+        std::cout <<"n Tri: " << triangle_count << std::endl;
+
+        // awesome, no we can also plan ahead
+        m_vertices.reserve( triangle_count*m_vertices_per_face );
+        m_normals.reserve( triangle_count ); // TODO: well in order for this to work, I really need to support vertex and face normals
+
+        //now read in all the triangles
+        for(int t=0; t<triangle_count; t++)
+        {
+            // read a traingle
+            const size_t triangle_buffer_size = 50;
+            char triangle_buffer[triangle_buffer_size];
+            file.read (triangle_buffer, triangle_buffer_size);
+
+            // add the face normal
+            float* n = reinterpret_cast<float*>( &triangle_buffer[0] );
+            for( size_t i=0; i<3; i++ ) m_normals.push_back( n[i] );
+
+            // add the vertices
+            float* v = reinterpret_cast<float*>( &triangle_buffer[12] );
+            for( size_t i=0; i<9; i++ ) m_vertices.push_back( v[i] );
+        }
+    }
+    else
+        throw std::runtime_error("nyx::mesh::load_stl: could not open \"" + path + "\".");
 }
 
 

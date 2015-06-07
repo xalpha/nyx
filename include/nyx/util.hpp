@@ -205,6 +205,22 @@ inline size_t channels( F format )
 #undef NYX_FORMAT_CHANNELS_ALL
 #undef NYX_FORMAT_CHANNELS
 
+/////
+// Primitive type
+///
+template <typename T>
+uint32_t primitive_type( T vertices_per_face )
+{
+    switch (vertices_per_face)
+    {
+        case 1 : return GL_POINTS;
+        case 2 : return GL_LINES;
+        case 3 : return GL_TRIANGLES;
+        case 4 : return GL_QUADS;
+        default: throw std::runtime_error( "nyx::primitives_type: unsupported primitive with " + std::to_string(vertices_per_face) + "vertices per face." );
+    }
+}
+
 
 //class Context
 //{
