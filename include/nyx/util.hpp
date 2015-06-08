@@ -217,7 +217,7 @@ uint32_t primitive_type( T vertices_per_face )
         case 2 : return GL_LINES;
         case 3 : return GL_TRIANGLES;
         case 4 : return GL_QUADS;
-        default: throw std::runtime_error( "nyx::primitives_type: unsupported primitive with " + std::to_string(vertices_per_face) + "vertices per face." );
+        default: throw std::runtime_error( "nyx::util::primitives_type: unsupported primitive with " + std::to_string(vertices_per_face) + "vertices per face." );
     }
 }
 

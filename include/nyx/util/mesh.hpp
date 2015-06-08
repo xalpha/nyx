@@ -239,7 +239,6 @@ inline void mesh<Tf,Ti,Dim>::load_obj( const std::string& path )
             else if( entry_type.compare("f") == 0 )
             {
                 // count the number of vertices per face (face vertex count)
-                std::cout << fvc << ": ";
                 std::vector<Ti> vi(fvc),ni(fvc),ti(fvc); // vertex,
                 for( size_t i=0; i<fvc; i++ )
                     ss >> vi[i] >> ni[i] >> ti[i];
